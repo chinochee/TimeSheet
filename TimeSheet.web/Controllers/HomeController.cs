@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using TimeSheet.web.Models;
+using TimeSheet.Web.Models;
 
-namespace TimeSheet.web.Controllers
+namespace TimeSheet.Web.Controllers
 {
     public class HomeController : Controller
     {

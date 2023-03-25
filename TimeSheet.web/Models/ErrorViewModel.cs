@@ -1,4 +1,4 @@
-namespace TimeSheet.web.Models
+namespace TimeSheet.Web.Models
 {
     public class ErrorViewModel
     {
