@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheet.Web", "TimeSheet.web\TimeSheet.Web.csproj", "{D88A8D37-9EF0-40F3-8BC7-A0C66D5E7C28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeSheet.Web", "TimeSheet.Web\TimeSheet.Web.csproj", "{D88A8D37-9EF0-40F3-8BC7-A0C66D5E7C28}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{27DFD45A-89AE-4248-A27F-C14012F7C531}"
 EndProject
