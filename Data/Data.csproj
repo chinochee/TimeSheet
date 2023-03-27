@@ -4,11 +4,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UserSecretsId>71944f0e-d9d5-42ad-b5e7-1b7aa0a89f1a</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Bogus" Version="34.0.2" />
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.3" />
