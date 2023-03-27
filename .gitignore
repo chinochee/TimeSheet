@@ -1,10 +1,11 @@
-/TimeSheet.web/bin/
-/TimeSheet.web/obj/
+/TimeSheet.Web/bin/
+/TimeSheet.Web/obj/
 /Services/bin/
 /Services/obj/
 /Data/bin/
 /Data/obj/
 /.idea/
 /.vs/
+*.db
 Folder.DotSettings.user
 AutotestSearch.log

@@ -9,12 +9,12 @@ namespace Data
         {
             var faker = new Faker();
 
-            var timeSheet = new TimeSheet() 
+            var timeSheet = new TimeSheet
             {
-                Id = new Random().Next(1, 10000),
+                Id = faker.Random.Int(1, 100000),
                 Name = faker.Random.String2(13, "qwertyuiopasdfghjklzxcvbnm"),
                 Scope = faker.Random.String2(13, "qwertyuiopasdfghjklzxcvbnm"),
-                WorkHours = new Random().Next(1, 100000),
+                WorkHours = faker.Random.Int(1, 100000),
                 DateOfWorks = RandomDay(),
                 Comment = faker.Random.String2(13, "qwertyuiopasdfghjklzxcvbnm"),
                 DateLastEdit = DateTime.Now

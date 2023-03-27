@@ -1,7 +1,6 @@
 using Data;
 using Services;
 using Data.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

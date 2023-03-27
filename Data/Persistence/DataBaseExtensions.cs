@@ -13,8 +13,12 @@ namespace Data.Persistence
                 var db = scope.ServiceProvider.GetRequiredService<TimeSheetContext>();
                 db.Database.Migrate();
 
-                var timeSheetList = GeneratorTimeSheet.CreateTimeSheetList();
-                db.Add(timeSheetList);
+                if (!db.TimeSheets.Any())
+                {
+                    var timeSheetList = GeneratorTimeSheet.CreateTimeSheetList();
+                    db.AddRange(timeSheetList);
+                    db.SaveChanges();
+                }
             }
         }
     }
