@@ -1,7 +1,6 @@
 ﻿using Data.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Data;
 using TimeSheet.Web.Models;
 
 namespace TimeSheet.Web.Controllers
@@ -22,10 +21,29 @@ namespace TimeSheet.Web.Controllers
             return View();
         }
 
-        public IActionResult TimeSheets()
+        public IActionResult TimeSheets(string sortOrder)
         {
-            var timeSheetList = _timeSheetContext.TimeSheets.ToList();
-            return View(timeSheetList);
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            var timeSheets = _timeSheetContext.TimeSheets.ToList();
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    timeSheets = timeSheets.OrderByDescending(s => s.Id).ToList();
+                    break;
+                case "Date":
+                    timeSheets = timeSheets.OrderBy(s => s.DateOfWorks).ToList();
+                    break;
+                case "date_desc":
+                    timeSheets = timeSheets.OrderByDescending(s => s.DateOfWorks).ToList();
+                    break;
+                default:
+                    timeSheets = timeSheets.OrderBy(s => s.Id).ToList();
+                    break;
+            }
+
+            return View(timeSheets);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

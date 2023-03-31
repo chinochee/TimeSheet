@@ -31,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.Comment)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateLastEdit)
+                @Html.ActionLink("Date last edit", "TimeSheets", new { sortOrder = ViewBag.DateSortParm })
             </th>
             <th></th>
         </tr>
