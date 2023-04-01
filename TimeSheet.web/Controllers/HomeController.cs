@@ -22,35 +22,20 @@ namespace TimeSheet.Web.Controllers
             return View();
         }
 
-        public IActionResult TimeSheets()
+        public IActionResult TimeSheets(string searchDateOfWorksFrom, string searchDateOfWorksTo)
         {
-            /*
-            IActionResult TimeSheets(string sortOrder)
-            
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
-
             var timeSheets = _timeSheetContext.TimeSheets.ToList();
-            switch (sortOrder)
+
+            //Filter by DateOfWorks
+            if (!String.IsNullOrEmpty(searchDateOfWorksFrom) && !String.IsNullOrEmpty(searchDateOfWorksTo))
             {
-                case "name_desc":
-                    timeSheets = timeSheets.OrderByDescending(s => s.Id).ToList();
-                    break;
-                case "Date":
-                    timeSheets = timeSheets.OrderBy(s => s.DateOfWorks).ToList();
-                    break;
-                case "date_desc":
-                    timeSheets = timeSheets.OrderByDescending(s => s.DateOfWorks).ToList();
-                    break;
-                default:
-                    timeSheets = timeSheets.OrderBy(s => s.Id).ToList();
-                    break;
+                DateTime searchDateOfWorksFromDateTime = DateTime.Parse(searchDateOfWorksFrom);
+                DateTime searchDatOfWorksToDateTime = DateTime.Parse(searchDateOfWorksTo);
+
+                timeSheets = timeSheets.Where(s => s.DateOfWorks >= searchDateOfWorksFromDateTime && s.DateOfWorks <= searchDatOfWorksToDateTime).ToList();
             }
 
-            return View(timeSheets);*/
-
-            var timeSheetList = _timeSheetContext.TimeSheets.ToList();
-            return View(timeSheetList);
+            return View(timeSheets);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
