@@ -13,10 +13,14 @@
 @using (Html.BeginForm("TimeSheets", "Home"))
 {
     <p>
-        <input type="hidden" value="@ViewBag.BookId" name="BookId" />
-        Input start date : @Html.TextBox("searchDateOfWorksFrom")
-        Input final date : @Html.TextBox("searchDateOfWorksTo")
-        <input type="submit" value="Apply filter" />
+        <div>
+            <h5>Filter by Date Of Works</h5>
+            <input type="hidden" value="@ViewBag.BookId" name="BookId"/>
+            Input start date : @Html.TextBox("searchDateOfWorksFrom")
+            Input final date : @Html.TextBox("searchDateOfWorksTo")
+            <input type="submit" value="Apply filter"/>
+        </div>
+        
     </p>
 }
 <table class="table">

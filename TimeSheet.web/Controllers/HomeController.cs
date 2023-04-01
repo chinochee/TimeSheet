@@ -32,7 +32,7 @@ namespace TimeSheet.Web.Controllers
                 DateTime searchDateOfWorksFromDateTime = DateTime.Parse(searchDateOfWorksFrom);
                 DateTime searchDatOfWorksToDateTime = DateTime.Parse(searchDateOfWorksTo);
 
-                timeSheets = timeSheets.Where(s => s.DateOfWorks >= searchDateOfWorksFromDateTime && s.DateOfWorks <= searchDatOfWorksToDateTime).ToList();
+                timeSheets = _timeSheetContext.TimeSheets.Where(s => s.DateOfWorks >= searchDateOfWorksFromDateTime && s.DateOfWorks <= searchDatOfWorksToDateTime).ToList();
             }
 
             return View(timeSheets);
