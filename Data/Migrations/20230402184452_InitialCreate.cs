@@ -31,11 +31,11 @@ namespace Data.Migrations
             migrationBuilder.Sql(
                 @"INSERT INTO TimeSheets (Id, NameEmployee, Scope, WorkHours, DateOfWorks, Comment, DateLastEdit)" +
                 "VALUES" +
-                "(1, 'Mark', 'Clear teritory, Washing some dress', '3', '1995-06-01 00:00:00','some commet', '2023-03-23 00:00:00')," +
-                "(2, 'Tomha', 'Do autotesting', '8', '1996-06-01 00:00:00','some commet 2', '2023-03-24 00:01:00')," +
-                "(3, 'Nik', 'Play to Atomic hearth', '2', '1997-06-01 00:00:00','some commet 3', '2023-03-25 00:02:00')," +
-                "(4, 'Tomha', 'Drink soda and eat ramen', '1', '1998-06-01 00:00:00','i wanna pitca', '2023-03-26 00:03:00')," +
-                "(5, 'Buch', 'Sleep and snore', '9', '1999-06-01 00:00:00','some commet', '2023-03-27 00:00:00')");
+                "(1, 'Mark', 'Clear teritory, Washing some dress', '3', '1995-06-01','some commet', '2023-03-23')," +
+                "(2, 'Tomha', 'Do autotesting', '8', '1996-06-01','some commet 2', '2023-03-24')," +
+                "(3, 'Nik', 'Play to Atomic hearth', '2', '1997-06-01','some commet 3', '2023-03-25')," +
+                "(4, 'Tomha', 'Drink soda and eat ramen', '1', '1998-06-01','i wanna pitca', '2023-03-26')," +
+                "(5, 'Buch', 'Sleep and snore', '9', '1999-06-01','some commet', '2023-03-27')");
         }
 
         /// <inheritdoc />
