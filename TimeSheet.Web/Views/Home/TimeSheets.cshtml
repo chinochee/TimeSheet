@@ -12,11 +12,14 @@
         <div>
             <h5>Filter by Date Of Works</h5>
             <p>
-                Input start date :  @Html.TextBoxFor(model => model.Filters.DateOfWorksFrom, new { @type = "date" })
-                Input final date :  @Html.TextBoxFor(model => model.Filters.DateOfWorksTo, new { @type = "date" })
+                Input start date : @Html.TextBoxFor(model => model.Filters.DateOfWorksFrom, new { @type = "date" })
+                Input final date : @Html.TextBoxFor(model => model.Filters.DateOfWorksTo, new { @type = "date" })
             </p>
             <p>
-                Scope time sheet : @Html.TextBoxFor(model => model.Filters.Scope)
+                Input scope time sheet : @Html.TextBoxFor(model => model.Filters.Scope)
+            </p>
+            <p>
+                Input name employee time sheet : @Html.TextBoxFor(model => model.Filters.NameEmployee)
             </p>
             <input type="submit" value="Apply filters"/>
         </div>

@@ -18,12 +18,13 @@ namespace Services
             var timeSheets = _context.TimeSheets
                 .WhereIf(filter.DateOfWorksFrom.HasValue, s => s.DateOfWorks >= filter.DateOfWorksFrom)
                 .WhereIf(filter.DateOfWorksTo.HasValue, s => s.DateOfWorks <= filter.DateOfWorksTo)
-                .WhereIf(!String.IsNullOrEmpty(filter.Scope), s => s.Scope == filter.Scope);
+                .WhereIf(!String.IsNullOrEmpty(filter.Scope), s => s.Scope == filter.Scope)
+                .WhereIf(!String.IsNullOrEmpty(filter.NameEmployee), s => s.NameEmployee == filter.NameEmployee);
 
             var timeSheetsDto = timeSheets.Select(timeSheets => new TimeSheetEntryDto
             {
                 Id = timeSheets.Id,
-                Name = timeSheets.Name,
+                NameEmployee = timeSheets.NameEmployee,
                 Scope = timeSheets.Scope,
                 WorkHours = timeSheets.WorkHours,
                 DateOfWorks = timeSheets.DateOfWorks.ToShortDateString(),

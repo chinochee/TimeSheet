@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    [Migration("20230326103820_InitialCreate")]
+    [Migration("20230402184452_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -35,7 +35,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateOfWorks")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameEmployee")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Scope")
