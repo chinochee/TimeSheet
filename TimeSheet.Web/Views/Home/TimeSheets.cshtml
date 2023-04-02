@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Data.Entities.TimeSheet>
+﻿@model TimeSheet.Web.Models.TimeSheetTableModel
 
 @{
     ViewData["Title"] = "TimeSheets";
@@ -10,76 +10,16 @@
     <a asp-action="Create">Create New</a>
 </p>*@
 
-@using (Html.BeginForm("TimeSheets", "Home"))
+@using (Html.BeginForm("TimeSheets", "Home", method:FormMethod.Get))
 {
     <p>
         <div>
             <h5>Filter by Date Of Works</h5>
-            <input type="hidden" value="@ViewBag.BookId" name="BookId"/>
-            Input start date : @Html.TextBox("searchDateOfWorksFrom")
-            Input final date : @Html.TextBox("searchDateOfWorksTo")
+            Input start date : @Html.TextBoxFor(model => model.Filters.DateOfWorksFrom, new { @type = "date" })
+            Input final date : @Html.TextBoxFor(model => model.Filters.DateOfWorksTo, new { @type = "date" })
             <input type="submit" value="Apply filter"/>
         </div>
-        
     </p>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scope)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfWorks)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateLastEdit)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Scope)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorkHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfWorks)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateLastEdit)
-            </td>
-            @*<td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>*@
-        </tr>
-}
-    </tbody>
-</table>
+
+<partial name="TimeSheetTable" model="Model.Entries"/>

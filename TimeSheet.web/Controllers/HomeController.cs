@@ -1,6 +1,6 @@
-﻿using Data.Entities;
-using Data.Persistence;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Services;
+using Services.Dtos;
 using System.Diagnostics;
 using TimeSheet.Web.Models;
 
@@ -9,12 +9,12 @@ namespace TimeSheet.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly TimeSheetContext _timeSheetContext;
+        private readonly ITimeSheetTableService _tableService;
 
-        public HomeController(ILogger<HomeController> logger, TimeSheetContext timeSheetContext)
+        public HomeController(ILogger<HomeController> logger, ITimeSheetTableService tableService)
         {
             _logger = logger;
-            _timeSheetContext = timeSheetContext;
+            _tableService = tableService;
         }
 
         public IActionResult Index()
@@ -22,20 +22,16 @@ namespace TimeSheet.Web.Controllers
             return View();
         }
 
-        public IActionResult TimeSheets(string searchDateOfWorksFrom, string searchDateOfWorksTo)
+        [HttpGet]
+        public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetFiltersDto filters)
         {
-            var timeSheets = _timeSheetContext.TimeSheets.ToList();
-
-            //Filter by DateOfWorks
-            if (!String.IsNullOrEmpty(searchDateOfWorksFrom) && !String.IsNullOrEmpty(searchDateOfWorksTo))
+            var result = new TimeSheetTableModel
             {
-                DateTime searchDateOfWorksFromDateTime = DateTime.Parse(searchDateOfWorksFrom);
-                DateTime searchDatOfWorksToDateTime = DateTime.Parse(searchDateOfWorksTo);
+                Filters = filters,
+                Entries = await _tableService.GetEntries(filters)
+            };
 
-                timeSheets = _timeSheetContext.TimeSheets.Where(s => s.DateOfWorks >= searchDateOfWorksFromDateTime && s.DateOfWorks <= searchDatOfWorksToDateTime).ToList();
-            }
-
-            return View(timeSheets);
+            return View(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
