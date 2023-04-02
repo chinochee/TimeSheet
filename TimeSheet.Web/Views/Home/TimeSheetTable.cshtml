@@ -1,34 +1,31 @@
 ﻿@model IEnumerable<Services.Dtos.TimeSheetEntryDto>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NameEmployee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Scope)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorkHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfWorks)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NameEmployee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Scope)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WorkHours)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfWorks)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comment)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
-                    @Html.DisplayFor(modelItem => item.NameEmployee)
+                @Html.DisplayFor(modelItem => item.NameEmployee)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Scope)
@@ -43,6 +40,12 @@
                 @Html.DisplayFor(modelItem => item.Comment)
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
+
+<hr align="center" width="90%" size="5" color="#121212" />
+
+<div>
+    <text for="CompanyName"> Total hours filtered time sheets: @Model.Select(t => t.WorkHours).Sum() </text>
+</div>
