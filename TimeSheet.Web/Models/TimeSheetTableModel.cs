@@ -6,5 +6,6 @@ namespace TimeSheet.Web.Models
     {
         public TimeSheetEntryDto[] Entries { get; set; }
         public TimeSheetFiltersDto Filters { get; set; }
+        public PageViewModel Page { get; set; }
     }
 }

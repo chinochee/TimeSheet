@@ -26,4 +26,24 @@
     </p>
 }
 
-<partial name="TimeSheetTable" model="Model.Entries"/>
+<partial name="TimeSheetTable" model="Model.Entries" />
+
+@if (Model.Page.HasPreviousPage)
+{
+    <a asp-action="TimeSheets"
+   asp-route-page="@(Model.Page.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+
+@if (Model.Page.HasNextPage)
+{
+    <a asp-action="TimeSheets"
+   asp-route-page="@(Model.Page.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}

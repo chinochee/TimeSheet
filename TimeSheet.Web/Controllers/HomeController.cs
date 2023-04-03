@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Dtos;
 using System.Diagnostics;
@@ -23,12 +25,21 @@ namespace TimeSheet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetFiltersDto filters)
+        public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetFiltersDto filters, int page = 1)
         {
+            int pageSize = 3;   // количество элементов на странице
+
+            var source = await _tableService.GetEntries(filters);
+            var count = source.Count();
+            var items = source.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+
             var result = new TimeSheetTableModel
             {
                 Filters = filters,
-                Entries = await _tableService.GetEntries(filters)
+                Entries = items,
+                Page = pageViewModel
             };
 
             return View(result);
