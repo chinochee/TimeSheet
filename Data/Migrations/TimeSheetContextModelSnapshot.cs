@@ -32,7 +32,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("DateOfWorks")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameEmployee")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Scope")

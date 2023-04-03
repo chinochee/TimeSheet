@@ -3,7 +3,7 @@
     public class TimeSheet
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string? NameEmployee { get; set; }
         public string? Scope { get; set; }
         public double? WorkHours { get; set; }
         public DateTime DateOfWorks { get; set; }

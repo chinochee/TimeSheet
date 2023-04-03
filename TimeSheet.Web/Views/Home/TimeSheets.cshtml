@@ -6,18 +6,22 @@
 
 <h1>TimeSheets</h1>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
-
 @using (Html.BeginForm("TimeSheets", "Home", method:FormMethod.Get))
 {
     <p>
         <div>
             <h5>Filter by Date Of Works</h5>
-            Input start date : @Html.TextBoxFor(model => model.Filters.DateOfWorksFrom, new { @type = "date" })
-            Input final date : @Html.TextBoxFor(model => model.Filters.DateOfWorksTo, new { @type = "date" })
-            <input type="submit" value="Apply filter"/>
+            <p>
+                Input start date : @Html.TextBoxFor(model => model.Filters.DateOfWorksFrom, new { @type = "date" })
+                Input final date : @Html.TextBoxFor(model => model.Filters.DateOfWorksTo, new { @type = "date" })
+            </p>
+            <p>
+                Input scope time sheet : @Html.TextBoxFor(model => model.Filters.Scope)
+            </p>
+            <p>
+                Input name employee time sheet : @Html.TextBoxFor(model => model.Filters.NameEmployee)
+            </p>
+            <input type="submit" value="Apply filters"/>
         </div>
     </p>
 }
