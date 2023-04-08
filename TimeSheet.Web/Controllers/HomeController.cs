@@ -27,13 +27,11 @@ namespace TimeSheet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetFiltersDto filters, int page = 1)
         {
-            int pageSize = 3;   // количество элементов на странице
-
-            var source = await _tableService.GetEntries(filters);
-            var count = source.Count();
-            var items = source.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
-
+            int pageSize = Configuration.GetConfiguration().PageSize;
+            var count = await _tableService.GetEntriesCount(filters);
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+
+            var items = await _tableService.GetEntries(filters, page);
 
             var result = new TimeSheetTableModel
             {
