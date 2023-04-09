@@ -1,6 +1,7 @@
 ﻿using Data.Entities;
 using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Services.Dtos;
 using Services.Extensions;
 
@@ -8,9 +9,11 @@ namespace Services
 {
     public class TimeSheetTableService : ITimeSheetTableService
     {
+        private readonly IConfiguration _configuration;
         private TimeSheetContext _context;
-        public TimeSheetTableService(TimeSheetContext context)
+        public TimeSheetTableService(IConfiguration configuration, TimeSheetContext context)
         {
+            _configuration = configuration;
             _context = context;
         }
 
@@ -29,7 +32,7 @@ namespace Services
                 Comment = timeSheets.Comment
             });
 
-            int pageSize = Configuration.GetConfiguration().PageSize;
+            var pageSize = Convert.ToInt32(_configuration.GetSection("PageSize").Value);
             var count = timeSheetsDto.CountAsync();
 
             return timeSheetsDto.Skip((page - 1) * pageSize).Take(pageSize).ToArrayAsync();
