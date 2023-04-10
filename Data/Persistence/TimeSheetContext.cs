@@ -18,10 +18,6 @@ namespace Data.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            modelBuilder.Entity<TimeSheet>()
-                .HasOne(c => c.Scope);
-            modelBuilder.Entity<Scope>()
-                .HasOne(c => c.Currency);
         }
     }
 }

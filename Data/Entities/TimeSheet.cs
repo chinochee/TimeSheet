@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Data.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
@@ -6,7 +8,6 @@ namespace Data.Entities
     {
         public int Id { get; set; }
         public string? NameEmployee { get; set; }
-        [ForeignKey("Scope")]
         public int ScopeId { get; set; }
         public Scope Scope { get; set; }
         public double? WorkHours { get; set; }
