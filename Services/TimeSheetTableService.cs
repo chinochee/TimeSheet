@@ -19,7 +19,8 @@ namespace Services
 
         public Task<TimeSheetEntryDto[]> GetEntries(TimeSheetFiltersDto filter, int page)
         {
-            var timeSheets = GetQuerybleFiltredEntries(filter);
+            var pageSize = Convert.ToInt32(_configuration.GetSection("PageSize").Value);
+            var timeSheets = GetQuerybleFiltredEntries(filter).Skip((page - 1) * pageSize).Take(pageSize);
 
             var timeSheetsDto = timeSheets.Select(timeSheets => new TimeSheetEntryDto
             {
@@ -32,10 +33,7 @@ namespace Services
                 Comment = timeSheets.Comment
             });
 
-            var pageSize = Convert.ToInt32(_configuration.GetSection("PageSize").Value);
-            var count = timeSheetsDto.CountAsync();
-
-            return timeSheetsDto.Skip((page - 1) * pageSize).Take(pageSize).ToArrayAsync();
+            return timeSheetsDto.ToArrayAsync();
         }
 
         public Task<int> GetEntriesCount(TimeSheetFiltersDto filter) => GetQuerybleFiltredEntries(filter).CountAsync();
