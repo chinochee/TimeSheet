@@ -1,15 +1,15 @@
-﻿namespace TimeSheet.Web.Models
-{
-    public class PageViewModel
-    {
-        public int PageNumber { get; private set; }
-        public int TotalPages { get; private set; }
+﻿using Services.Dtos;
 
-        public PageViewModel(int count, int pageNumber, int pageSize)
+namespace TimeSheet.Web.Models
+{
+    public class TimeSheetsFiltersModel : TimeSheetFiltersDto
+    {
+        public void SetTotalPage(int count, int pageSize)
         {
-            PageNumber = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         }
+        
+        public int TotalPages { get; set; }
 
         public bool HasPreviousPage
         {

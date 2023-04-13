@@ -1,9 +1,5 @@
-﻿using Data.Persistence;
-using Microsoft.EntityFrameworkCore;
-
-namespace Data.Entities
+﻿namespace Data.Entities
 {
-    [EntityTypeConfiguration(typeof(CurrencyConfiguration))]
     public class Currency
     {
         public int Id { get; set; }

@@ -1,8 +1,4 @@
-﻿using Data.Persistence;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Data.Entities
+﻿namespace Data.Entities
 {
     public class Scope
     {

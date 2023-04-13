@@ -9,7 +9,10 @@ namespace Data.Persistence
         public void Configure(EntityTypeBuilder<Scope> builder)
         {
             builder.HasKey(t => t.Id);
-            builder.HasOne(c => c.Currency).WithMany();
+            builder.HasOne(c => c.Currency)
+                .WithMany()
+                .HasForeignKey()
+                .IsRequired();
         }
     }
 }

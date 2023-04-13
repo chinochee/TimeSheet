@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    [Migration("20230410074711_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230411191358_ChangeScopeToSeparateTable")]
+    partial class ChangeScopeToSeparateTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

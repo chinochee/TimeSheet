@@ -10,35 +10,42 @@ namespace Services
     public class TimeSheetTableService : ITimeSheetTableService
     {
         private readonly IConfiguration _configuration;
-        private TimeSheetContext _context;
+        private readonly TimeSheetContext _context;
         public TimeSheetTableService(IConfiguration configuration, TimeSheetContext context)
         {
             _configuration = configuration;
             _context = context;
         }
 
-        public Task<TimeSheetEntryDto[]> GetEntries(TimeSheetFiltersDto filter, int page)
+        public async Task<TimeSheetTableDto> GetEntries(TimeSheetFiltersDto filter)
         {
             var pageSize = Convert.ToInt32(_configuration.GetSection("PageSize").Value);
-            var timeSheets = GetQuerybleFiltredEntries(filter).Skip((page - 1) * pageSize).Take(pageSize);
+            var timeSheets = GetQueryableFilteredEntries(filter)
+                .Select(timeSheets => new TimeSheetEntryDto
+                {
+                    Id = timeSheets.Id,
+                    NameEmployee = timeSheets.NameEmployee,
+                    Scope = timeSheets.Scope.Name,
+                    WorkHours = timeSheets.WorkHours,
+                    DateOfWorks = timeSheets.DateOfWorks.ToShortDateString(),
+                    Comment = timeSheets.Comment
+                });
 
-            var timeSheetsDto = timeSheets.Select(timeSheets => new TimeSheetEntryDto
+            var count = await timeSheets.CountAsync();
+
+            var entries = await timeSheets.Skip((filter.PageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToArrayAsync();
+            
+            return new TimeSheetTableDto
             {
-                Id = timeSheets.Id,
-                NameEmployee = timeSheets.NameEmployee,
-                Scope = timeSheets.Scope.Name,
-                ScopeRate = timeSheets.Scope.Rate.ToString() + " " + timeSheets.Scope.Currency.ShortName,
-                WorkHours = timeSheets.WorkHours,
-                DateOfWorks = timeSheets.DateOfWorks.ToShortDateString(),
-                Comment = timeSheets.Comment
-            });
-
-            return timeSheetsDto.ToArrayAsync();
+                Entries = entries,
+                Total = count,
+                PageSize = pageSize
+            };
         }
 
-        public Task<int> GetEntriesCount(TimeSheetFiltersDto filter) => GetQuerybleFiltredEntries(filter).CountAsync();
-
-        private IQueryable<TimeSheet> GetQuerybleFiltredEntries(TimeSheetFiltersDto filter)
+        private IQueryable<TimeSheet> GetQueryableFilteredEntries(TimeSheetFiltersDto filter)
         {
             return _context.TimeSheets
                 .WhereIf(filter.DateOfWorksFrom.HasValue, s => s.DateOfWorks >= filter.DateOfWorksFrom)

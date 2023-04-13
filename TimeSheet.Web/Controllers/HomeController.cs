@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
-using Services.Dtos;
 using System.Diagnostics;
 using TimeSheet.Web.Models;
 
@@ -25,22 +24,10 @@ namespace TimeSheet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetFiltersDto filters, int page = 1)
+        public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetsFiltersModel filters)
         {
-            var pageSize = Convert.ToInt32(_configuration.GetSection("PageSize").Value);
-            var count = await _tableService.GetEntriesCount(filters);
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-
-            var items = await _tableService.GetEntries(filters, page);
-
-            var result = new TimeSheetTableModel
-            {
-                Filters = filters,
-                Entries = items,
-                Page = pageViewModel
-            };
-
-            return View(result);
+            var tableDto = await _tableService.GetEntries(filters);
+            return View(new TimeSheetTableModel(tableDto, filters));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

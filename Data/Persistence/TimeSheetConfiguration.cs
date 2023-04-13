@@ -10,7 +10,10 @@ namespace Data.Persistence
         {
             builder.HasKey(t => t.Id);
             builder.Property(t => t.WorkHours).HasPrecision(4, 2);
-            builder.HasOne(c => c.Scope).WithMany();
+            builder.HasOne(c => c.Scope)
+                .WithMany()
+                .HasForeignKey()
+                .IsRequired();
         }
     }
 }
