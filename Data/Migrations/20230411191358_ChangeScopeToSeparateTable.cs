@@ -87,19 +87,7 @@ namespace Data.Migrations
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 2 WHERE Id = 1");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 3");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 4 WHERE Id = 5");
-            migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 5 WHERE Id = 4");
-            /*migrationBuilder.Sql(@"ALTER TABLE TimeSheets DROP COLUMN Scope");
-            migrationBuilder.Sql(@"ALTER TABLE TimeSheets ADD ScopeId VARCHAR(20) NULL, column_c INT NULL");*/
-
-            //TODO Искать по id и проставлять scope id
-            /*migrationBuilder.Sql(
-                @"UPDATE INTO TimeSheets (Id, NameEmployee, ScopeId, WorkHours, DateOfWorks, Comment, DateLastEdit)" +
-                "VALUES" +
-                "(1, 'Mark', '1', '3', '1995-06-01','some commet', '2023-03-23')," +
-                "(2, 'Tomha', '2', '8', '1996-06-01','some commet 2', '2023-03-24')," +
-                "(3, 'Nik', '3', '2', '1997-06-01','some commet 3', '2023-03-25')," +
-                "(4, 'Tomha', '4', '1', '1998-06-01','i wanna pitca', '2023-03-26')," +
-                "(5, 'Buch', '4', '9', '1999-06-01','some commet', '2023-03-27')");*/
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 4");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TimeSheets_Scopes_ScopeId",

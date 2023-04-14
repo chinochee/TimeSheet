@@ -1,7 +1,7 @@
 ﻿using Data.Entities;
 using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Services.Configuration;
 using Services.Dtos;
 using Services.Extensions;
 
@@ -9,17 +9,15 @@ namespace Services
 {
     public class TimeSheetTableService : ITimeSheetTableService
     {
-        private readonly IConfiguration _configuration;
         private readonly TimeSheetContext _context;
-        public TimeSheetTableService(IConfiguration configuration, TimeSheetContext context)
+        public TimeSheetTableService(TimeSheetContext context)
         {
-            _configuration = configuration;
             _context = context;
         }
 
         public async Task<TimeSheetTableDto> GetEntries(TimeSheetFiltersDto filter)
         {
-            var pageSize = Convert.ToInt32(_configuration.GetSection("PageSize").Value);
+            var pageSize = Convert.ToInt32(TableSettings.PageSize);
             var timeSheets = GetQueryableFilteredEntries(filter)
                 .Select(timeSheets => new TimeSheetEntryDto
                 {

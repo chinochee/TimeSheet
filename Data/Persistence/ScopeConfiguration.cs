@@ -11,7 +11,7 @@ namespace Data.Persistence
             builder.HasKey(t => t.Id);
             builder.HasOne(c => c.Currency)
                 .WithMany()
-                .HasForeignKey()
+                .HasForeignKey(k => k.CurrencyId)
                 .IsRequired();
         }
     }
