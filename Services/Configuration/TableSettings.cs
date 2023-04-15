@@ -1,7 +1,8 @@
 ﻿namespace Services.Configuration
 {
-    public static class TableSettings
+    public class TableSettings
     {
-        public static int PageSize = 2;
+        public const string Settings = "TableSettings";
+        public int PageSize { get; set; }
     }
 }
