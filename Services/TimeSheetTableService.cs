@@ -10,17 +10,17 @@ namespace Services
 {
     public class TimeSheetTableService : ITimeSheetTableService
     {
-        private readonly IOptions<TableSettings> _config;
+        private readonly TableSettings _tableSettings;
         private readonly TimeSheetContext _context;
         public TimeSheetTableService(IOptions<TableSettings> config, TimeSheetContext context)
         {
-            _config = config;
+            _tableSettings = config.Value;
             _context = context;
         }
 
         public async Task<TimeSheetTableDto> GetEntries(TimeSheetFiltersDto filter)
         {
-            var pageSize = _config.Value.PageSize;
+            var pageSize = _tableSettings.PageSize;
             var timeSheets = GetQueryableFilteredEntries(filter)
                 .Select(timeSheets => new TimeSheetEntryDto
                 {
