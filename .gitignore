@@ -9,5 +9,6 @@
 *.db
 *.db-shm
 *.db-wal
+*.csproj.user
 Folder.DotSettings.user
 AutotestSearch.log

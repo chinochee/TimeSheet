@@ -4,6 +4,6 @@ namespace Services
 {
     public interface ITimeSheetTableService
     {
-        Task<TimeSheetEntryDto[]> GetEntries(TimeSheetFiltersDto filter);
+        Task<TimeSheetTableDto> GetEntries(TimeSheetFiltersDto filter);
     }
 }

@@ -1,12 +1,17 @@
 using Data;
 using Services;
 using Data.Persistence;
+using Services.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDataLayer(builder.Configuration)
     .AddServicesLayer(builder.Configuration);
+
+builder.Services.AddRazorPages();
+builder.Services.Configure<TableSettings>(
+    builder.Configuration.GetSection(TableSettings.Settings));
 
 var app = builder.Build();
 

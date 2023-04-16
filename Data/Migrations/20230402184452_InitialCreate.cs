@@ -28,6 +28,7 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_TimeSheets", x => x.Id);
                 });
+
             migrationBuilder.Sql(
                 @"INSERT INTO TimeSheets (Id, NameEmployee, Scope, WorkHours, DateOfWorks, Comment, DateLastEdit)" +
                 "VALUES" +
