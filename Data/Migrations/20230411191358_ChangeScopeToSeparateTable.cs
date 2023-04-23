@@ -80,12 +80,13 @@ namespace Data.Migrations
                 "VALUES" +
                 "(1, 'Clear teritory, Washing some dress', 230, 643)," +
                 "(2, 'Do autotesting', 120, 826)," +
-                "(3, 'Play to Atomic hearth', 350, 840)," +
-                "(4, 'Sleep and snore', 1200, 978)");
+                "(3, 'Play to Atomic hearth', 300, 840)," +
+                "(4, 'Play to Atomic hearth', 350, 840)," +
+                "(5, 'Sleep and snore', 1200, 978)");
 
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 1 WHERE Id = 2");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 2 WHERE Id = 1");
-            migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 3");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 5 WHERE Id = 3");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 4 WHERE Id = 5");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 4");
 

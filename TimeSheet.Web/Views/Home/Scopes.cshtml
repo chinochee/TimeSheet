@@ -1,0 +1,25 @@
+﻿@model TimeSheet.Web.Models.ScopeTableModel
+
+@{
+    ViewData["Title"] = "Scopes";
+}
+
+<h1>Scopes</h1>
+
+@using (Html.BeginForm("Scopes", "Home", method: FormMethod.Get, new { id = "scopes-table" }))
+{
+    <partial name="ScopeTable" model="Model.Entries" />
+
+    @Html.HiddenFor(model => model.Filters.PageNumber)
+
+    @if (Model.Filters.HasPreviousPage)
+    {
+        <button onclick="backScopeList()">Back</button>
+
+    }
+
+    @if (Model.Filters.HasNextPage)
+    {
+        <button onclick="nextScopeList()">Next</button>
+    }
+}

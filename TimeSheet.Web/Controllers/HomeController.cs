@@ -9,13 +9,15 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<HomeController> _logger;
-        private readonly ITimeSheetTableService _tableService;
+        private readonly ITimeSheetTableService _timeSheetTableService;
+        private readonly IScopeTableService _scopeTableService;
 
-        public HomeController(IConfiguration configuration, ILogger<HomeController> logger, ITimeSheetTableService tableService)
+        public HomeController(IConfiguration configuration, ILogger<HomeController> logger, ITimeSheetTableService timeSheetTableService, IScopeTableService scopeTableService)
         {
             _configuration = configuration;
             _logger = logger;
-            _tableService = tableService;
+            _timeSheetTableService = timeSheetTableService;
+            _scopeTableService = scopeTableService;
         }
 
         public IActionResult Index()
@@ -26,8 +28,15 @@ namespace TimeSheet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> TimeSheets([FromQuery]TimeSheetsFiltersModel filters)
         {
-            var tableDto = await _tableService.GetEntries(filters);
+            var tableDto = await _timeSheetTableService.GetEntries(filters);
             return View(new TimeSheetTableModel(tableDto, filters));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Scopes([FromQuery]ScopesFiltersModel filters)
+        {
+            var tableDto = await _scopeTableService.GetEntries(filters);
+            return View(new ScopeTableModel(tableDto, filters));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

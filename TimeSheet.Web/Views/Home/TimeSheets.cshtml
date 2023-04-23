@@ -31,12 +31,12 @@
 
     @if (Model.Filters.HasPreviousPage)
     {
-        <button onclick="back()">Back</button>
+        <button onclick="backTimeSheetList()">Back</button>
         
     }
 
     @if (Model.Filters.HasNextPage)
     {
-        <button onclick="next()">Next</button>
+        <button onclick="nextTimeSheetList()">Next</button>
     }
 }
