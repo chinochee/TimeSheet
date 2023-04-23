@@ -70,10 +70,10 @@ namespace Data.Migrations
             migrationBuilder.Sql(
                 @"INSERT INTO Currencies (Id, ShortName, FullName, DollarExchangeRate)" +
                 "VALUES" +
-                "(643, 'RUB', 'Rouble', 81)," +
-                "(826, 'GBP', 'Pound sterling', 101)," +
+                "(643, 'RUB', 'Rouble', 0.012)," +
+                "(826, 'GBP', 'Pound sterling', 1.24)," +
                 "(840, 'USD', 'Dollar', 1)," +
-                "(978, 'EUR', 'Euro', 89)");
+                "(978, 'EUR', 'Euro', 1.11)");
 
             migrationBuilder.Sql(
                 @"INSERT INTO Scopes (Id, Name, Rate, CurrencyId)" +

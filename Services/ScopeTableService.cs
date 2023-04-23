@@ -24,7 +24,7 @@ namespace Services
                     Id = timeSheets.Scope.Id,
                     Name = timeSheets.Scope.Name,
                     Rate = $"{timeSheets.Scope.Rate} {timeSheets.Scope.Currency.ShortName}",
-                    RateUSD = $"{timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate} USD"
+                    RateUSD = $"{Math.Round(timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate, 2)} USD"
                 });
 
             var count = await scopes.CountAsync();
