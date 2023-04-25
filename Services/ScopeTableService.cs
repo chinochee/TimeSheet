@@ -24,9 +24,10 @@ namespace Services
                 {
                     Id = timeSheets.Scope.Id,
                     Name = timeSheets.Scope.Name,
-                    TotalPrice = $"{timeSheets.Scope.Rate} {timeSheets.Scope.Currency.ShortName}",
+                    TotalPrice = $"{Math.Round((double)(timeSheets.Scope.Rate * timeSheets.WorkHours), 2)} {timeSheets.Scope.Currency.ShortName}",
                     TotalPriceUSD = Math.Round((double)(Math.Round(timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate, 2) * timeSheets.WorkHours), 2)
-                }).OrderByDescending(scope => scope.TotalPriceUSD);
+                })
+                .OrderByDescending(scope => scope.TotalPriceUSD);
 
             var count = await scopes.CountAsync();
 
