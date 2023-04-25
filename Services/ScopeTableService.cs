@@ -15,6 +15,7 @@ namespace Services
             _tableSettings = config.Value;
             _context = context;
         }
+
         public async Task<ScopeTableDto> GetEntries(ScopeFiltersDto filter)
         {
             var pageSize = _tableSettings.PageSize;
@@ -23,9 +24,9 @@ namespace Services
                 {
                     Id = timeSheets.Scope.Id,
                     Name = timeSheets.Scope.Name,
-                    Rate = $"{timeSheets.Scope.Rate} {timeSheets.Scope.Currency.ShortName}",
-                    RateUSD = $"{Math.Round(timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate, 2)} USD"
-                });
+                    TotalPrice = $"{timeSheets.Scope.Rate} {timeSheets.Scope.Currency.ShortName}",
+                    TotalPriceUSD = Math.Round((double)(Math.Round(timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate, 2) * timeSheets.WorkHours), 2)
+                }).OrderByDescending(scope => scope.TotalPriceUSD);
 
             var count = await scopes.CountAsync();
 
