@@ -6,11 +6,9 @@ namespace TimeSheet.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(IConfiguration configuration, ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
-            _configuration = configuration;
             _logger = logger;
         }
 
