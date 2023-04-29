@@ -19,14 +19,22 @@ namespace Services
         public async Task<ScopeTableDto> GetEntries(ScopeFiltersDto filter)
         {
             var pageSize = _tableSettings.PageSize;
+
             var scopes = _context.TimeSheets
                 .Select(timeSheets => new ScopeEntryDto
                 {
                     Id = timeSheets.Scope.Id,
-                    Name = timeSheets.Scope.Name,
-                    TotalPrice = $"{Math.Round((double)(timeSheets.Scope.Rate * timeSheets.WorkHours), 2)} {timeSheets.Scope.Currency.ShortName}",
+                    TotalPrice = Math.Round((double)(timeSheets.Scope.Rate * timeSheets.WorkHours), 2),
                     TotalPriceUSD = Math.Round((double)(Math.Round(timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate, 2) * timeSheets.WorkHours), 2)
-                })
+                }).GroupBy(scope => scope.Id).Select(scope =>
+                    new ScopeEntryDto
+                    {
+                        Id = scope.Key,
+                        Name = _context.TimeSheets.First(s => s.Scope.Id == scope.Key).Scope.Name,
+                        TotalPrice = scope.Sum(scope => scope.TotalPrice),
+                        TotalPriceUSD = scope.Sum(scope => scope.TotalPriceUSD),
+                        NameCurrency = _context.TimeSheets.First(s => s.Scope.Id == scope.Key).Scope.Currency.ShortName
+                    })
                 .OrderByDescending(scope => scope.TotalPriceUSD);
 
             var count = await scopes.CountAsync();

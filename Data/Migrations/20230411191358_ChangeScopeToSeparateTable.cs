@@ -90,6 +90,16 @@ namespace Data.Migrations
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 4 WHERE Id = 5");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 4");
 
+            migrationBuilder.Sql(
+                @"INSERT INTO TimeSheets (Id, NameEmployee, ScopeId, WorkHours, DateOfWorks, Comment, DateLastEdit)" +
+                "VALUES" +
+                "(6, 'Alex', '3', '7', '2022-06-07','some commet', '2023-04-21')," +
+                "(7, 'Aram', '3', '15', '2022-06-06','some commet', '2023-04-22')," +
+                "(8, 'Gennady', '3', '10', '2022-06-05','some commet', '2023-04-23')," +
+                "(9, 'Van', '4', '4', '2022-06-04','some commet', '2023-04-24')," +
+                "(10, 'Billy', '5', '12', '2022-06-03','some commet', '2023-04-25')," +
+                "(11, 'Hanibal', '4', '5', '2022-06-02','some commet', '2023-04-26')");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_TimeSheets_Scopes_ScopeId",
                 table: "TimeSheets",
