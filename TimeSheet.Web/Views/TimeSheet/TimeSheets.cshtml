@@ -6,7 +6,7 @@
 
 <h1>TimeSheets</h1>
 
-@using (Html.BeginForm("TimeSheets", "Home", method:FormMethod.Get, new { id = "time-sheets-table"}))
+@using (Html.BeginForm("TimeSheets", "TimeSheet", method: FormMethod.Get, new { id = "time-sheets-table" }))
 {
     <p>
         <div>
@@ -31,12 +31,12 @@
 
     @if (Model.Filters.HasPreviousPage)
     {
-        <button onclick="back()">Back</button>
+        <button onclick="backTimeSheetList()">Back</button>
         
     }
 
     @if (Model.Filters.HasNextPage)
     {
-        <button onclick="next()">Next</button>
+        <button onclick="nextTimeSheetList()">Next</button>
     }
 }

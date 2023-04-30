@@ -70,24 +70,35 @@ namespace Data.Migrations
             migrationBuilder.Sql(
                 @"INSERT INTO Currencies (Id, ShortName, FullName, DollarExchangeRate)" +
                 "VALUES" +
-                "(643, 'RUB', 'Rouble', 81)," +
-                "(826, 'GBP', 'Pound sterling', 101)," +
+                "(643, 'RUB', 'Rouble', 0.012)," +
+                "(826, 'GBP', 'Pound sterling', 1.24)," +
                 "(840, 'USD', 'Dollar', 1)," +
-                "(978, 'EUR', 'Euro', 89)");
+                "(978, 'EUR', 'Euro', 1.11)");
 
             migrationBuilder.Sql(
                 @"INSERT INTO Scopes (Id, Name, Rate, CurrencyId)" +
                 "VALUES" +
                 "(1, 'Clear teritory, Washing some dress', 230, 643)," +
                 "(2, 'Do autotesting', 120, 826)," +
-                "(3, 'Play to Atomic hearth', 350, 840)," +
-                "(4, 'Sleep and snore', 1200, 978)");
+                "(3, 'Play to Atomic hearth', 300, 840)," +
+                "(4, 'Play to Atomic hearth', 350, 840)," +
+                "(5, 'Sleep and snore', 1200, 978)");
 
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 1 WHERE Id = 2");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 2 WHERE Id = 1");
-            migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 3");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 5 WHERE Id = 3");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 4 WHERE Id = 5");
             migrationBuilder.Sql(@"UPDATE TimeSheets SET ScopeId = 3 WHERE Id = 4");
+
+            migrationBuilder.Sql(
+                @"INSERT INTO TimeSheets (Id, NameEmployee, ScopeId, WorkHours, DateOfWorks, Comment, DateLastEdit)" +
+                "VALUES" +
+                "(6, 'Alex', '3', '7', '2022-06-07','some commet', '2023-04-21')," +
+                "(7, 'Aram', '3', '15', '2022-06-06','some commet', '2023-04-22')," +
+                "(8, 'Gennady', '3', '10', '2022-06-05','some commet', '2023-04-23')," +
+                "(9, 'Van', '4', '4', '2022-06-04','some commet', '2023-04-24')," +
+                "(10, 'Billy', '5', '12', '2022-06-03','some commet', '2023-04-25')," +
+                "(11, 'Hanibal', '4', '5', '2022-06-02','some commet', '2023-04-26')");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TimeSheets_Scopes_ScopeId",

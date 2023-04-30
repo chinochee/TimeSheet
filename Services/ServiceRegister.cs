@@ -10,6 +10,7 @@ namespace Services
             //TODO регистрируем здесь сервисы
 
             services.AddScoped<ITimeSheetTableService, TimeSheetTableService>();
+            services.AddScoped<IScopeTableService, ScopeTableService>();
 
             return services;
         }
