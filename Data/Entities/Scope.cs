@@ -7,5 +7,6 @@
         public double Rate { get; set; }
         public int CurrencyId { get; set; }
         public Currency Currency { get; set; }
+        public IEnumerable<TimeSheet> TimeSheetList { get; set; }
     }
 }

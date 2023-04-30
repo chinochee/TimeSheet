@@ -18,9 +18,13 @@
             <p>
                 Input scope time sheet : @Html.TextBoxFor(model => model.Filters.Scope)
             </p>
-            <p>
-                Input name employee time sheet : @Html.TextBoxFor(model => model.Filters.NameEmployee)
-            </p>
+                Input name employee time sheet : @Html.DropDownListFor(model => model.Filters.EmployeeId, 
+                                                     Model.Employees.Select(t => new SelectListItem
+                                                     {
+                                                         Text = t.Name, 
+                                                         Value = t.Id.ToString()
+                        
+                                                     }),"Choose all employee")
             <input type="submit" value="Apply filters"/>
         </div>
     </p>

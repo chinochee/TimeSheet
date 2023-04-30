@@ -18,25 +18,16 @@ namespace Services
 
         public Task<ScopeEntryDto[]> GetEntries()
         {
-            return _context.TimeSheets.GroupBy(s => new
-                {
-                    s.Scope.Id,
-                    s.Scope.Name,
-                    s.Scope.Rate,
-                    s.Scope.Currency.DollarExchangeRate,
-                    s.Scope.Currency.ShortName
-                })
-                .Select(s => new ScopeEntryDto
-                {
-                    Id = s.Key.Id,
-                    Name = s.Key.Name,
-                    TotalPrice = Math.Round(s.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Key.Rate, 2),
-                    TotalPriceUSD = Math.Round(s.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Key.Rate * s.Key.DollarExchangeRate, 2),
-                    NameCurrency = s.Key.ShortName
-                })
-                .OrderByDescending(scope => scope.TotalPriceUSD)
-                .Take(_tableSettings.TopScope)
-                .ToArrayAsync();
+            return _context.Scopes.Select(s => new ScopeEntryDto
+            {
+                Id = s.Id,
+                Name = s.Name,
+                TotalPrice = Math.Round(s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0), 2),
+                NameCurrency = s.Currency.ShortName,
+                TotalPriceUSD = Math.Round(s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Currency.DollarExchangeRate, 2)
+            }).OrderByDescending(scope => scope.TotalPriceUSD)
+            .Take(_tableSettings.TopScope)
+            .ToArrayAsync();
         }
     }
 }

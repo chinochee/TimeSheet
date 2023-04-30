@@ -128,7 +128,7 @@ namespace Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Scope", "Scope")
-                        .WithMany()
+                        .WithMany("TimeSheetList")
                         .HasForeignKey("ScopeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -136,6 +136,11 @@ namespace Data.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Scope");
+                });
+
+            modelBuilder.Entity("Data.Entities.Scope", b =>
+                {
+                    b.Navigation("TimeSheetList");
                 });
 #pragma warning restore 612, 618
         }
