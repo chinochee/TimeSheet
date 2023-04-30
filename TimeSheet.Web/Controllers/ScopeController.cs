@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
-using TimeSheet.Web.Models;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -16,10 +15,10 @@ namespace TimeSheet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Scopes([FromQuery] ScopesFiltersModel filters)
+        public async Task<IActionResult> Scopes()
         {
-            var tableDto = await _scopeTableService.GetEntries(filters);
-            return View(new ScopeTableModel(tableDto, filters));
+            var scopes = await _scopeTableService.GetEntries();
+            return View(scopes);
         }
     }
 }

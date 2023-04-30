@@ -8,7 +8,6 @@ namespace Services.Dtos
         public string? Name { get; set; }
         public double TotalPrice { get; set; }
         public double TotalPriceUSD { get; set; }
-        public Currency Currency { get; set; }
         public string? NameCurrency { get; set; }
     }
 }

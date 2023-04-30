@@ -4,6 +4,6 @@ namespace Services
 {
     public interface IScopeTableService
     {
-        Task<ScopeTableDto> GetEntries(ScopeFiltersDto filter);
+        Task<ScopeEntryDto[]> GetEntries();
     }
 }

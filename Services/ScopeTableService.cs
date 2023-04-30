@@ -16,9 +16,9 @@ namespace Services
             _context = context;
         }
 
-        public async Task<ScopeTableDto> GetEntries(ScopeFiltersDto filter)
+        public async Task<ScopeEntryDto[]> GetEntries()
         {
-            var pageSize = _tableSettings.PageSize;
+            var pageSize = _tableSettings.TopScope;
 
             var scopes = _context.TimeSheets
                 .Select(timeSheets => new ScopeEntryDto
@@ -35,20 +35,11 @@ namespace Services
                         TotalPriceUSD = scope.Sum(scope => scope.TotalPriceUSD),
                         NameCurrency = _context.TimeSheets.First(s => s.Scope.Id == scope.Key).Scope.Currency.ShortName
                     })
-                .OrderByDescending(scope => scope.TotalPriceUSD);
-
-            var count = await scopes.CountAsync();
-
-            var entries = await scopes.Skip((filter.PageNumber - 1) * pageSize)
+                .OrderByDescending(scope => scope.TotalPriceUSD)
                 .Take(pageSize)
                 .ToArrayAsync();
-            
-            return new ScopeTableDto
-            {
-                Entries = entries,
-                Total = count,
-                PageSize = pageSize
-            };
+
+            return await scopes;
         }
     }
 }
