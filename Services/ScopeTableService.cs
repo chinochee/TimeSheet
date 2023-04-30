@@ -16,30 +16,27 @@ namespace Services
             _context = context;
         }
 
-        public async Task<ScopeEntryDto[]> GetEntries()
+        public Task<ScopeEntryDto[]> GetEntries()
         {
-            var pageSize = _tableSettings.TopScope;
-
-            var scopes = _context.TimeSheets
-                .Select(timeSheets => new ScopeEntryDto
+            return _context.TimeSheets.GroupBy(s => new
                 {
-                    Id = timeSheets.Scope.Id,
-                    TotalPrice = Math.Round((double)(timeSheets.Scope.Rate * timeSheets.WorkHours), 2),
-                    TotalPriceUSD = Math.Round((double)(Math.Round(timeSheets.Scope.Rate * timeSheets.Scope.Currency.DollarExchangeRate, 2) * timeSheets.WorkHours), 2)
-                }).GroupBy(scope => scope.Id).Select(scope =>
-                    new ScopeEntryDto
-                    {
-                        Id = scope.Key,
-                        Name = _context.TimeSheets.First(s => s.Scope.Id == scope.Key).Scope.Name,
-                        TotalPrice = scope.Sum(scope => scope.TotalPrice),
-                        TotalPriceUSD = scope.Sum(scope => scope.TotalPriceUSD),
-                        NameCurrency = _context.TimeSheets.First(s => s.Scope.Id == scope.Key).Scope.Currency.ShortName
-                    })
+                    s.Scope.Id,
+                    s.Scope.Name,
+                    s.Scope.Rate,
+                    s.Scope.Currency.DollarExchangeRate,
+                    s.Scope.Currency.ShortName
+                })
+                .Select(s => new ScopeEntryDto
+                {
+                    Id = s.Key.Id,
+                    Name = s.Key.Name,
+                    TotalPrice = Math.Round(s.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Key.Rate, 2),
+                    TotalPriceUSD = Math.Round(s.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Key.Rate * s.Key.DollarExchangeRate, 2),
+                    NameCurrency = s.Key.ShortName
+                })
                 .OrderByDescending(scope => scope.TotalPriceUSD)
-                .Take(pageSize)
+                .Take(_tableSettings.TopScope)
                 .ToArrayAsync();
-
-            return await scopes;
         }
     }
 }
