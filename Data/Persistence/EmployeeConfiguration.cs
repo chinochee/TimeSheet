@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.Persistence
 {
-    public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
+    public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {
-        public void Configure(EntityTypeBuilder<Currency> builder)
+        public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.HasKey(t => t.Id);
         }
