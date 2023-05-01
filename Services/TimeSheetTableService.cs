@@ -52,7 +52,7 @@ namespace Services
                 .WhereIf(filter.DateOfWorksFrom.HasValue, s => s.DateOfWorks >= filter.DateOfWorksFrom)
                 .WhereIf(filter.DateOfWorksTo.HasValue, s => s.DateOfWorks <= filter.DateOfWorksTo)
                 .WhereIf(!String.IsNullOrEmpty(filter.Scope), s => s.Scope.Name == filter.Scope)
-                .WhereIf(!String.IsNullOrEmpty(filter.EmployeeId.ToString()), s => s.Employee.Id == filter.EmployeeId);
+                .WhereIf(filter.EmployeeId.HasValue, s => s.Employee.Id == filter.EmployeeId);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TimeSheet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Scopes()
         {
-            var scopes = await _scopeTableService.GetEntries();
+            var scopes = await _scopeTableService.Get();
             return View(scopes);
         }
     }
