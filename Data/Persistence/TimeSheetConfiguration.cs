@@ -15,7 +15,7 @@ namespace Data.Persistence
                 .HasForeignKey(k => k.ScopeId)
                 .IsRequired();
             builder.HasOne(c => c.Employee)
-                .WithMany()
+                .WithMany(c => c.TimeSheetList)
                 .HasForeignKey(k => k.EmployeeId)
                 .IsRequired();
         }

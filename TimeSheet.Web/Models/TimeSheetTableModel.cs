@@ -5,7 +5,7 @@ namespace TimeSheet.Web.Models
 {
     public class TimeSheetTableModel
     {
-        public TimeSheetTableModel(TimeSheetTableDto tableDto, TimeSheetsFiltersModel filters, Employee[] employees = null)
+        public TimeSheetTableModel(TimeSheetTableDto tableDto, TimeSheetsFiltersModel filters, EmployeeEntryDto[] employees = null)
         {
             Entries = tableDto.Entries;
             Filters = filters;
@@ -15,6 +15,6 @@ namespace TimeSheet.Web.Models
 
         public TimeSheetEntryDto[] Entries { get; set; }
         public TimeSheetsFiltersModel Filters { get; set; }
-        public Employee[]? Employees { get; set; }
+        public EmployeeEntryDto[]? Employees { get; set; }
     }
 }

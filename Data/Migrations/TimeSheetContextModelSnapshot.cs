@@ -122,7 +122,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.TimeSheet", b =>
                 {
                     b.HasOne("Data.Entities.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("TimeSheetList")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -136,6 +136,11 @@ namespace Data.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Scope");
+                });
+
+            modelBuilder.Entity("Data.Entities.Employee", b =>
+                {
+                    b.Navigation("TimeSheetList");
                 });
 
             modelBuilder.Entity("Data.Entities.Scope", b =>

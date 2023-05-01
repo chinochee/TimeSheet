@@ -1,9 +1,10 @@
-﻿using Data.Entities;
+﻿using Services.Dtos;
 
 namespace Services
 {
     public interface IEmployeeService
     {
-        Task<Employee[]> GetEntries();
+        Task<EmployeeEntryDto[]> Get();
+        Task<EmployeeEntryDto[]> GetTopLastYearTimeSheet();
     }
 }

@@ -16,7 +16,7 @@ namespace Services
             _context = context;
         }
 
-        public Task<ScopeEntryDto[]> GetEntries()
+        public Task<ScopeEntryDto[]> Get()
         {
             return _context.Scopes.Select(s => new ScopeEntryDto
             {
@@ -26,7 +26,7 @@ namespace Services
                 NameCurrency = s.Currency.ShortName,
                 TotalPriceUSD = Math.Round(s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Currency.DollarExchangeRate, 2)
             }).OrderByDescending(scope => scope.TotalPriceUSD)
-            .Take(_tableSettings.TopScope)
+            .Take(_tableSettings.TopScopes)
             .ToArrayAsync();
         }
     }
