@@ -8,17 +8,22 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly ILogger<TimeSheetController> _logger;
         private readonly ITimeSheetTableService _timeSheetTableService;
-        public TimeSheetController(ILogger<TimeSheetController> logger, ITimeSheetTableService timeSheetTableService)
+        private readonly IEmployeeService _employeeTableService;
+
+        public TimeSheetController(ILogger<TimeSheetController> logger, ITimeSheetTableService timeSheetTableService, IEmployeeService employeeTableService)
         {
             _logger = logger;
             _timeSheetTableService = timeSheetTableService;
+            _employeeTableService = employeeTableService;
         }
 
         [HttpGet]
         public async Task<IActionResult> TimeSheets([FromQuery] TimeSheetsFiltersModel filters)
         {
             var tableDto = await _timeSheetTableService.GetEntries(filters);
-            return View(new TimeSheetTableModel(tableDto, filters));
+            var employees = await _employeeTableService.GetEntries();
+
+            return View(new TimeSheetTableModel(tableDto, filters, employees));
         }
     }
 }

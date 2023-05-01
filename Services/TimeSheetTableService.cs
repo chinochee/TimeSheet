@@ -25,7 +25,7 @@ namespace Services
                 .Select(timeSheets => new TimeSheetEntryDto
                 {
                     Id = timeSheets.Id,
-                    NameEmployee = timeSheets.NameEmployee,
+                    NameEmployee = timeSheets.Employee.Name,
                     Scope = timeSheets.Scope.Name,
                     WorkHours = timeSheets.WorkHours,
                     DateOfWorks = timeSheets.DateOfWorks.ToShortDateString(),
@@ -37,7 +37,7 @@ namespace Services
             var entries = await timeSheets.Skip((filter.PageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToArrayAsync();
-            
+
             return new TimeSheetTableDto
             {
                 Entries = entries,
@@ -52,7 +52,7 @@ namespace Services
                 .WhereIf(filter.DateOfWorksFrom.HasValue, s => s.DateOfWorks >= filter.DateOfWorksFrom)
                 .WhereIf(filter.DateOfWorksTo.HasValue, s => s.DateOfWorks <= filter.DateOfWorksTo)
                 .WhereIf(!String.IsNullOrEmpty(filter.Scope), s => s.Scope.Name == filter.Scope)
-                .WhereIf(!String.IsNullOrEmpty(filter.NameEmployee), s => s.NameEmployee == filter.NameEmployee);
+                .WhereIf(!String.IsNullOrEmpty(filter.EmployeeId.ToString()), s => s.Employee.Id == filter.EmployeeId);
         }
     }
 }

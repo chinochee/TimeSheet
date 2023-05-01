@@ -11,8 +11,12 @@ namespace Data.Persistence
             builder.HasKey(t => t.Id);
             builder.Property(t => t.WorkHours).HasPrecision(4, 2);
             builder.HasOne(c => c.Scope)
-                .WithMany()
+                .WithMany(c => c.TimeSheetList)
                 .HasForeignKey(k => k.ScopeId)
+                .IsRequired();
+            builder.HasOne(c => c.Employee)
+                .WithMany()
+                .HasForeignKey(k => k.EmployeeId)
                 .IsRequired();
         }
     }

@@ -1,6 +1,4 @@
-﻿using Data.Entities;
-
-namespace Services.Dtos
+﻿namespace Services.Dtos
 {
     public class ScopeEntryDto
     {
