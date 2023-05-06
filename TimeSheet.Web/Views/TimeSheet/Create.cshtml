@@ -1,0 +1,37 @@
+﻿@model Services.Dtos.TimeSheetCreateDto
+
+<h4>TimeSheetAddingDto</h4>
+<hr />
+@using (Html.BeginForm("Create", "TimeSheet", method: FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Employee</label>
+                @Html.DropDownListFor(model => model.EmployeeId,
+                (IEnumerable<SelectListItem>)ViewBag.Employees,"Choose employee")
+            </div>
+            <div class="form-group">
+                <label class="control-label">Scope</label>
+                @Html.DropDownListFor(model => model.ScopeId,
+                (IEnumerable<SelectListItem>)ViewBag.Scopes,"Choose scope")
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkHours" class="control-label"></label>
+                <input asp-for="WorkHours" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfWorks" class="control-label"></label>
+                <input asp-for="DateOfWorks" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label"></label>
+                <input asp-for="Comment" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </div>
+    </div>
+}

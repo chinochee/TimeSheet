@@ -16,6 +16,8 @@ namespace Services
             _context = context;
         }
 
+        public Task<Dictionary<int, string>> GetDictionary() => _context.Scopes.ToDictionaryAsync(s => s.Id, s => s.Name);
+
         public Task<ScopeEntryDto[]> Get()
         {
             return _context.Scopes.Select(s => new ScopeEntryDto
