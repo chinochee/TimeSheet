@@ -26,7 +26,7 @@ namespace Services
                 {
                     Id = timeSheets.Id,
                     NameEmployee = timeSheets.Employee.Name,
-                    Scope = timeSheets.Scope.Name,
+                    NameScope = timeSheets.Scope.Name,
                     WorkHours = timeSheets.WorkHours,
                     DateOfWorks = timeSheets.DateOfWorks.ToShortDateString(),
                     Comment = timeSheets.Comment
@@ -44,6 +44,21 @@ namespace Services
                 Total = count,
                 PageSize = pageSize
             };
+        }
+
+        public async Task Add(TimeSheetCreateDto timeSheet)
+        {
+            await _context.TimeSheets.AddAsync(new TimeSheet
+            {
+                EmployeeId = timeSheet.EmployeeId,
+                ScopeId = timeSheet.ScopeId,
+                WorkHours = timeSheet.WorkHours,
+                DateOfWorks = timeSheet.DateOfWorks,
+                Comment = timeSheet.Comment,
+                DateLastEdit = DateTime.UtcNow
+            });
+            
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<TimeSheet> GetQueryableFilteredEntries(TimeSheetFiltersDto filter)

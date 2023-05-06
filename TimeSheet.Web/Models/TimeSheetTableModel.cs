@@ -1,5 +1,4 @@
-﻿using Data.Entities;
-using Services.Dtos;
+﻿using Services.Dtos;
 
 namespace TimeSheet.Web.Models
 {
