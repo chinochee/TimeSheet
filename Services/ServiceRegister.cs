@@ -12,6 +12,7 @@ namespace Services
             services.AddScoped<ITimeSheetTableService, TimeSheetTableService>();
             services.AddScoped<IScopeTableService, ScopeTableService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
 
             return services;
         }
