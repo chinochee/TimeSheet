@@ -1,4 +1,5 @@
-﻿using Data.Persistence;
+﻿using ClosedXML.Excel;
+using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Services.Dtos;
 
@@ -12,6 +13,13 @@ namespace Services
             _context = context;
         }
 
-        public Task<CurrencyEntryDto[]> Get() => _context.Currencies.Select(c => new CurrencyEntryDto{ Id = c.Id, ShortName = c.ShortName, FullName = c.FullName, DollarExchangeRate = c.DollarExchangeRate}).ToArrayAsync();
+        public Task<CurrencyEntryDto[]> Get() => _context.Currencies.Select(c => new CurrencyEntryDto
+            {
+                Id = c.Id,
+                ShortName = c.ShortName,
+                FullName = c.FullName,
+                DollarExchangeRate = c.DollarExchangeRate
+            })
+            .ToArrayAsync();
     }
 }
