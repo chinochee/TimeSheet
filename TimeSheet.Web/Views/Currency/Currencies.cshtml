@@ -36,3 +36,10 @@
 {
     <input type="submit" value="Export currencies" />
 }
+
+<br>
+<h3>Select file to upload</h3>
+<form asp-action="OnPostCurrencies" asp-controller="Currency" method="post" enctype="multipart/form-data">
+    <input type="file" name="uploadedFile" /><br>
+    <input type="submit" value="Upload" />
+</form>

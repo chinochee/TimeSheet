@@ -8,12 +8,14 @@ namespace TimeSheet.Web.Controllers
         private readonly ILogger<CurrencyController> _logger;
         private readonly ICurrencyService _currencyService;
         private readonly ICurrencyExportService _currencyExportService;
+        private readonly ICurrencyImportService _currencyImportService;
 
-        public CurrencyController(ILogger<CurrencyController> logger, ICurrencyService currencyService, ICurrencyExportService currencyExportService)
+        public CurrencyController(ILogger<CurrencyController> logger, ICurrencyService currencyService, ICurrencyExportService currencyExportService, ICurrencyImportService currencyImportService)
         {
             _logger = logger;
             _currencyService = currencyService;
             _currencyExportService = currencyExportService;
+            _currencyImportService = currencyImportService;
         }
 
         [HttpGet]
@@ -28,6 +30,23 @@ namespace TimeSheet.Web.Controllers
         {
             var currencies = await _currencyExportService.GetMemoryStreamXlsx();
             return File(currencies.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExchangeRates.xlsx");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OnPostCurrencies(IFormFile uploadedFile)
+        {
+            if (uploadedFile != null)
+            {
+                var filePath = Path.GetTempFileName();
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await uploadedFile.CopyToAsync(stream);
+                    _currencyImportService.PostCurrenciesFromStreamXlsx(stream);
+                }
+            }
+
+            return RedirectToAction("Currencies");
         }
     }
 }
