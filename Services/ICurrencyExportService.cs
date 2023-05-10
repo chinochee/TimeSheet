@@ -1,7 +1,9 @@
-﻿namespace Services
+﻿using ClosedXML.Excel;
+
+namespace Services
 {
     public interface ICurrencyExportService
     {
-        Task<MemoryStream> GetMemoryStreamXlsx();
+        Task<XLWorkbook> Export();
     }
 }
