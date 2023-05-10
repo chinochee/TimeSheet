@@ -2,6 +2,6 @@
 {
     public interface ICurrencyImportService
     {
-        void PostCurrenciesFromStreamXlsx(Stream stream);
+        void Import(Stream stream);
     }
 }

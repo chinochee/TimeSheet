@@ -11,7 +11,7 @@ namespace Services
             _currencyService = currencyService;
         }
 
-        public void PostCurrenciesFromStreamXlsx(Stream stream)
+        public async void Import(Stream stream)
         {
             var workbook = new XLWorkbook(stream);
             var worksheet = workbook.Worksheets.Worksheet(1);
@@ -29,7 +29,7 @@ namespace Services
                 currencies.Add(currency);
             }
 
-            _currencyService.Post(currencies.ToArray());
+            _currencyService.Add(currencies.ToArray());
         }
     }
 }

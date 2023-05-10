@@ -22,13 +22,15 @@ namespace Services
             })
             .ToArrayAsync();
 
-        public void Post(Currency[] currencyEntryDto)
+        public void Add(Currency[] currencyEntryDto)
         {
+            var currencies = _context.Currencies;
+
             foreach (var currency in currencyEntryDto)
             {
-                if (_context.Currencies.Any(c => c.FullName == currency.FullName))
+                if (currencies.Any(c => c.FullName == currency.FullName))
                 {
-                    var editCurrency = _context.Currencies.FirstOrDefault(c => c.FullName == currency.FullName);
+                    var editCurrency = currencies.FirstOrDefault(c => c.FullName == currency.FullName);
 
                     editCurrency.ShortName = currency.ShortName;
                     editCurrency.DollarExchangeRate = currency.DollarExchangeRate;

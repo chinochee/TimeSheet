@@ -35,15 +35,13 @@ namespace TimeSheet.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> OnPostCurrencies(IFormFile uploadedFile)
         {
-            if (uploadedFile != null)
-            {
-                var filePath = Path.GetTempFileName();
+            if (uploadedFile == null)
+                return RedirectToAction("Currencies");
 
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await uploadedFile.CopyToAsync(stream);
-                    _currencyImportService.PostCurrenciesFromStreamXlsx(stream);
-                }
+            using (var stream = new MemoryStream())
+            {
+                await uploadedFile.CopyToAsync(stream);
+                _currencyImportService.Import(stream);
             }
 
             return RedirectToAction("Currencies");

@@ -6,6 +6,6 @@ namespace Services
     public interface ICurrencyService
     {
         Task<CurrencyEntryDto[]> Get();
-        void Post(Currency[] currency);
+        void Add(Currency[] currency);
     }
 }
