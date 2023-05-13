@@ -2,6 +2,6 @@
 {
     public interface ICurrencyImportService
     {
-        void Import(Stream stream);
+        Task Import(Stream stream);
     }
 }

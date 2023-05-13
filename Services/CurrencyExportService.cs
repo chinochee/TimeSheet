@@ -11,7 +11,7 @@ namespace Services
             _currencyService = currencyService;
         }
 
-        public async Task<MemoryStream> GetMemoryStreamXlsx()
+        public async Task<XLWorkbook> Export()
         {
             var currencies = await _currencyService.Get();
 
@@ -28,7 +28,7 @@ namespace Services
                 worksheet.Cell(i + 2, 3).Value = currencies[i].DollarExchangeRate;
             }
 
-            return workbook.AsMemoryStream();
+            return workbook;
         }
     }
 }

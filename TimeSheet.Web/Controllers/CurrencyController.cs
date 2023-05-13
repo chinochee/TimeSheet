@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Helpers;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -28,8 +29,8 @@ namespace TimeSheet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> OnGetCurrencies()
         {
-            var currencies = await _currencyExportService.GetMemoryStreamXlsx();
-            return File(currencies.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExchangeRates.xlsx");
+            var currencies = await _currencyExportService.Export();
+            return File(currencies.AsMemoryStream().ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExchangeRates.xlsx");
         }
 
         [HttpPost]
