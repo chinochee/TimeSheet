@@ -13,7 +13,7 @@ namespace Services
             _context = context;
         }
 
-        public Task<CurrencyEntryDto[]> Get() => _context.Currencies.Select(c => new CurrencyEntryDto
+        public async Task<CurrencyEntryDto[]> Get() => await _context.Currencies.Select(c => new CurrencyEntryDto
             {
                 Id = c.Id,
                 ShortName = c.ShortName,
@@ -22,27 +22,25 @@ namespace Services
             })
             .ToArrayAsync();
 
-        public void Add(Currency[] currencyEntryDto)
+        public async Task Save(IEnumerable<Currency> currencyEntryDto)
         {
-            var currencies = _context.Currencies;
+            var currencies = await _context.Currencies.ToDictionaryAsync(currency => currency.ShortName);
 
             foreach (var currency in currencyEntryDto)
             {
-                if (currencies.Any(c => c.FullName == currency.FullName))
+                if (currencies.TryGetValue(currency.ShortName, out var currencyD))
                 {
-                    var editCurrency = currencies.FirstOrDefault(c => c.FullName == currency.FullName);
-
-                    editCurrency.ShortName = currency.ShortName;
-                    editCurrency.DollarExchangeRate = currency.DollarExchangeRate;
-                    _context.Currencies.Update(editCurrency);
+                    currencyD.FullName = currency.FullName;
+                    currencyD.DollarExchangeRate = currency.DollarExchangeRate;
+                    _context.Currencies.Update(currencyD);
                 }
                 else
                 {
-                    _context.Currencies.Add(currency);
+                    await _context.Currencies.AddAsync(currency);
                 }
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
