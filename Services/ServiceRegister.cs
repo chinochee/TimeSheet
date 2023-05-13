@@ -12,6 +12,7 @@ namespace Services
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<ICurrencyExportService, CurrencyExportService>();
+            services.AddScoped<ICurrencyImportService, CurrencyImportService>();
 
             return services;
         }
