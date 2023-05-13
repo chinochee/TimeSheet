@@ -18,6 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.TotalPriceUSD)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPriceInBTC)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,6 +41,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TotalPriceUSD)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPriceInBTC)
             </td>
         </tr>
 }
