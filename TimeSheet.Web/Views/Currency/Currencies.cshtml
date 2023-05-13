@@ -2,21 +2,21 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShortName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DollarExchangeRate)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShortName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DollarExchangeRate)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FullName)
@@ -28,6 +28,11 @@
                 @Html.DisplayFor(modelItem => item.DollarExchangeRate)
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
+
+@using (Html.BeginForm("OnGetCurrencies", "Currency", method: FormMethod.Get))
+{
+    <input type="submit" value="Export currencies" />
+}

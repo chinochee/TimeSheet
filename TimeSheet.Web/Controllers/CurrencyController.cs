@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Helpers;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -7,11 +8,13 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly ILogger<CurrencyController> _logger;
         private readonly ICurrencyService _currencyService;
+        private readonly ICurrencyExportService _currencyExportService;
 
-        public CurrencyController(ILogger<CurrencyController> logger, ICurrencyService currencyService)
+        public CurrencyController(ILogger<CurrencyController> logger, ICurrencyService currencyService, ICurrencyExportService currencyExportService)
         {
             _logger = logger;
             _currencyService = currencyService;
+            _currencyExportService = currencyExportService;
         }
 
         [HttpGet]
@@ -19,6 +22,13 @@ namespace TimeSheet.Web.Controllers
         {
             var currencies = await _currencyService.Get();
             return View(currencies);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OnGetCurrencies()
+        {
+            var currencies = await _currencyExportService.Export();
+            return File(currencies.AsMemoryStream().ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExchangeRates.xlsx");
         }
     }
 }
