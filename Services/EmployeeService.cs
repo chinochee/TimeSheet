@@ -10,11 +10,13 @@ namespace Services
     {
         private readonly TimeSheetContext _context;
         private readonly TableSettings _tableSettings;
+        private readonly IBitcoinHttpClient _client;
 
-        public EmployeeService(IOptions<TableSettings> config, TimeSheetContext context)
+        public EmployeeService(IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClient client)
         {
             _tableSettings = config.Value;
             _context = context;
+            _client = client;
         }
 
         public async Task<EmployeeEntryDto[]> Get() => await _context.Employees
@@ -22,7 +24,7 @@ namespace Services
 
         public async Task<EmployeeEntryDto[]> GetTopLastYearTimeSheet()
         {
-            var rateBTC = await ApiCalls.GetRateBTC();
+            var coinDesk =  await _client.GetRates();
 
             return await _context.Employees.Select(e => new EmployeeEntryDto
             {
@@ -37,7 +39,7 @@ namespace Services
                     Math.Round(
                         e.TimeSheetList.Where(t => t.DateOfWorks >= DateTime.UtcNow.AddYears(-1)).Sum(timeSheet =>
                             timeSheet.WorkHours * timeSheet.Scope.Rate * timeSheet.Scope.Currency.DollarExchangeRate ??
-                            0) / rateBTC, 2)
+                            0) / coinDesk.bpi.USD.rate_float, 2)
             }).OrderByDescending(s => s.TotalPriceUSD).Take(_tableSettings.TopEmployees).ToArrayAsync();
         }
     }
