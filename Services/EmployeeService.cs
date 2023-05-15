@@ -46,9 +46,9 @@ namespace Services
             {
                 Id = e.Id,
                 Name = e.Name,
-                TotalPriceUSD = e.TimeSheetList.Where(t => t.DateOfWorks >= DateTime.UtcNow.AddYears(-1)).Sum(timeSheet =>
-                    timeSheet.WorkHours * timeSheet.Scope.Rate * timeSheet.Scope.Currency.DollarExchangeRate ??
-                    0),
+                TotalPriceUSD = e.TimeSheetList.Where(t => t.DateOfWorks >= DateTime.UtcNow.AddYears(-1)).Sum(
+                    timeSheet =>
+                        timeSheet.WorkHours * timeSheet.Scope.Rate * timeSheet.Scope.Currency.DollarExchangeRate ?? 0)
             }).OrderByDescending(s => s.TotalPriceUSD).Take(_tableSettings.TopEmployees).ToArrayAsync();
 
             _logger.LogInformation("Get top employees from db Finished");

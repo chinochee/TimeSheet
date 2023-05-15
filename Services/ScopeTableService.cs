@@ -44,9 +44,9 @@ namespace Services
                 {
                     Id = s.Id,
                     Name = s.Name,
-                    TotalPrice = Math.Round(s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0), 2),
+                    TotalPrice = s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0),
                     NameCurrency = s.Currency.ShortName,
-                    TotalPriceUSD = Math.Round(s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Currency.DollarExchangeRate, 2)
+                    TotalPriceUSD = s.Rate * s.TimeSheetList.Sum(timeSheet => timeSheet.WorkHours ?? 0) * s.Currency.DollarExchangeRate
                 }).OrderByDescending(scope => scope.TotalPriceUSD)
                 .Take(_tableSettings.TopScopes)
                 .ToArrayAsync();
