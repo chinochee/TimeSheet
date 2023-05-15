@@ -1,7 +1,9 @@
-﻿namespace Services
+﻿using Services.Dtos;
+
+namespace Services
 {
     public interface IBitcoinHttpClient
     {
-        Task<CoinDesk> GetRates();
+        Task<RatesDto> GetRates();
     }
 }

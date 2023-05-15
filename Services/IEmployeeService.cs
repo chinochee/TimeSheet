@@ -5,6 +5,6 @@ namespace Services
     public interface IEmployeeService
     {
         Task<EmployeeEntryDto[]> Get();
-        Task<EmployeeEntryDto[]> GetTopLastYearTimeSheet();
+        Task<EmployeeEntryBTCDto[]> GetTopLastYearTimeSheet();
     }
 }
