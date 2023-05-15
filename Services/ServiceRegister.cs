@@ -13,7 +13,6 @@ namespace Services
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<ICurrencyExportService, CurrencyExportService>();
             services.AddScoped<ICurrencyImportService, CurrencyImportService>();
-            services.AddScoped<IBitcoinHttpClient, CoinDeskHttpClient>();
 
             return services;
         }
