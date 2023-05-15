@@ -4,7 +4,7 @@ namespace Services
 {
     public interface IScopeTableService
     {
-        Task<ScopeEntryDto[]> Get();
+        Task<ScopeEntryBTCDto[]> Get();
         Task<Dictionary<int, string>> GetDictionary();
     }
 }

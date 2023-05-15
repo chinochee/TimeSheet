@@ -11,7 +11,8 @@ builder.Services.AddDataLayer(builder.Configuration)
 
 builder.Services.AddRazorPages();
 builder.Services.Configure<TableSettings>(
-    builder.Configuration.GetSection(TableSettings.Settings));
+    builder.Configuration.GetSection(TableSettings.Settings)); 
+builder.Services.AddHttpClient<IBitcoinHttpClient, CoinDeskHttpClient>();
 
 var app = builder.Build();
 
