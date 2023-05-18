@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Services.BitcoinHttpClientService;
 using Services.Configuration;
 using Services.Dtos;
 
@@ -14,11 +15,11 @@ namespace Services
         private readonly IBitcoinHttpClient _client;
         private readonly ILogger<EmployeeService> _logger;
 
-        public EmployeeService(ILogger<EmployeeService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClient client)
+        public EmployeeService(ILogger<EmployeeService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClientService clientService)
         {
             _tableSettings = config.Value;
             _context = context;
-            _client = client;
+            _client = clientService.GetClient();
             _logger = logger;
         }
 

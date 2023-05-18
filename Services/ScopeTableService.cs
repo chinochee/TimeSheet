@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Services.BitcoinHttpClientService;
 using Services.Configuration;
 using Services.Dtos;
 
@@ -13,11 +14,11 @@ namespace Services
         private readonly TimeSheetContext _context;
         private readonly IBitcoinHttpClient _client;
         private readonly ILogger<ScopeTableService> _logger;
-        public ScopeTableService(ILogger<ScopeTableService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClient client)
+        public ScopeTableService(ILogger<ScopeTableService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClientService bitcoinHttpClientService)
         {
             _tableSettings = config.Value;
             _context = context;
-            _client = client;
+            _client = bitcoinHttpClientService.GetClient();
             _logger = logger;
         }
 

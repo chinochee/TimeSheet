@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Services.BitcoinHttpClientService;
 
 namespace Services
 {
@@ -13,6 +14,8 @@ namespace Services
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<ICurrencyExportService, CurrencyExportService>();
             services.AddScoped<ICurrencyImportService, CurrencyImportService>();
+            services.AddScoped<IBitcoinHttpClientService, BitcoinHttpClientService.BitcoinHttpClientService>();
+            services.AddMemoryCache();
 
             return services;
         }

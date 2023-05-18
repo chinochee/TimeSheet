@@ -1,31 +1,31 @@
-﻿@model IEnumerable<Services.Dtos.ScopeEntryBTCDto>
+﻿@model ScopeModel
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @Html.DisplayNameFor(model => model.Scopes[0].Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Scopes[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
+                @Html.DisplayNameFor(model => model.Scopes[0].TotalPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NameCurrency)
+                @Html.DisplayNameFor(model => model.Scopes[0].NameCurrency)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPriceUSD)
+                @Html.DisplayNameFor(model => model.Scopes[0].TotalPriceUSD)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPriceInBTC)
+                @Html.DisplayNameFor(model => model.Scopes[0].TotalPriceInBTC)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Scopes) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -49,3 +49,5 @@
 }
     </tbody>
 </table>
+
+@await Html.PartialAsync("~/Views/MemoryCache/MemoryCacheData.cshtml", Model.CacheDateTime)

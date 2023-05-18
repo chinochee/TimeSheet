@@ -4,6 +4,7 @@ namespace Services
 {
     public interface IBitcoinHttpClient
     {
-        Task<RatesDto> GetRates();
+        string? ApiHostName { get; }
+        public Task<RatesDto> GetRates();
     }
 }

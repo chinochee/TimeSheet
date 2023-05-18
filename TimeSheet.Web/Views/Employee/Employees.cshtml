@@ -1,25 +1,25 @@
-﻿@model IEnumerable<Services.Dtos.EmployeeEntryBTCDto>
+﻿@model EmployeeModel
 
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPriceUSD)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPriceInBTC)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Employees[0].Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employees[0].Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employees[0].TotalPriceUSD)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employees[0].TotalPriceInBTC)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model.Employees) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -34,6 +34,8 @@
                 @Html.DisplayFor(modelItem => item.TotalPriceInBTC)
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
+
+@await Html.PartialAsync("~/Views/MemoryCache/MemoryCacheData.cshtml", Model.CacheDateTime)
