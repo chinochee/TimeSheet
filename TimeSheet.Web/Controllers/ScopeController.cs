@@ -18,7 +18,6 @@ namespace TimeSheet.Web.Controllers
         public async Task<IActionResult> Scopes()
         {
             var scopes = await _scopeTableService.Get();
-
             return View(scopes);
         }
     }

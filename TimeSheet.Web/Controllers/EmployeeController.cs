@@ -18,7 +18,6 @@ namespace TimeSheet.Web.Controllers
         public async Task<IActionResult> Employees()
         {
             var employes = await _employeeTableService.GetTopLastYearTimeSheet();
-
             return View(employes);
         }
     }
