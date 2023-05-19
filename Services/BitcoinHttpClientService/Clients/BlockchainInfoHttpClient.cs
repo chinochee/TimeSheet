@@ -36,7 +36,6 @@ namespace Services.BitcoinHttpClientService.Clients
 
                 var result = await _httpClient.GetFromJsonAsync<BlockchainInfoDto>("");
                 ratesDto.Rate = result.USD.sell;
-                ratesDto.UpdateAt = DateTime.UtcNow;
 
                 _memoryCache.Set("rate", ratesDto, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(_cacheSettings.SecondsHoldCache)));
 

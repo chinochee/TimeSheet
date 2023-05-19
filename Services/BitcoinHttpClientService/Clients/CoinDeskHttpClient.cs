@@ -36,7 +36,6 @@ namespace Services.BitcoinHttpClientService.Clients
 
                 var result = await _httpClient.GetFromJsonAsync<CoinDesk>("");
                 ratesDto.Rate = result.bpi.USD.rate_float;
-                ratesDto.UpdateAt = DateTime.UtcNow;
 
                 _memoryCache.Set("rate", ratesDto, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(_cacheSettings.SecondsHoldCache)));
 

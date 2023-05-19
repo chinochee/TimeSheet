@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Services;
-using Services.Dtos;
-using TimeSheet.Web.Models;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -10,13 +7,11 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly ILogger<ScopeController> _logger;
         private readonly IScopeTableService _scopeTableService;
-        private readonly IMemoryCache _memoryCache;
 
-        public ScopeController(ILogger<ScopeController> logger, IMemoryCache memoryCache, IScopeTableService scopeTableService)
+        public ScopeController(ILogger<ScopeController> logger, IScopeTableService scopeTableService)
         {
             _logger = logger;
             _scopeTableService = scopeTableService;
-            _memoryCache = memoryCache;
         }
 
         [HttpGet]
@@ -24,13 +19,7 @@ namespace TimeSheet.Web.Controllers
         {
             var scopes = await _scopeTableService.Get();
 
-            var cacheDateTime = new CacheDateTimeDto
-            {
-                CacheCurrentDateTime = _memoryCache.Get<RatesDto>("rate")?.UpdateAt,
-                CurrentDateTime = DateTime.UtcNow
-            };
-
-            return View(new ScopeModel(cacheDateTime, scopes));
+            return View(scopes);
         }
     }
 }
