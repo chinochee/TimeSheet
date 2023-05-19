@@ -26,7 +26,7 @@ namespace TimeSheet.Web.Controllers
 
             var cacheDateTime = new CacheDateTimeDto
             {
-                CacheCurrentDateTime = _memoryCache.Get<RatesDto>("rate")?.update_at,
+                CacheCurrentDateTime = _memoryCache.Get<RatesDto>("rate")?.UpdateAt,
                 CurrentDateTime = DateTime.UtcNow
             };
 
