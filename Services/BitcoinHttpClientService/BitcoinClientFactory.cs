@@ -3,12 +3,12 @@ using Services.Configuration;
 
 namespace Services.BitcoinHttpClientService
 {
-    public class BitcoinHttpClientService : IBitcoinHttpClientService
+    public class BitcoinClientFactory : IBitcoinHttpClientService
     {
         private readonly Dictionary<string, IBitcoinHttpClient> _clients;
         private readonly CacheSettings _cacheSettings;
 
-        public BitcoinHttpClientService(IEnumerable<IBitcoinHttpClient> clients, IOptionsMonitor<CacheSettings> config)
+        public BitcoinClientFactory(IEnumerable<IBitcoinHttpClient> clients, IOptionsMonitor<CacheSettings> config)
         {
             _clients = clients.ToDictionary(p => p.ApiHostName);
             _cacheSettings = config.CurrentValue;
