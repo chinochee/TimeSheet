@@ -7,9 +7,9 @@ using Services.Dtos;
 
 namespace Services.HttpClientService
 {
-    public class CoinDeskHttpClient : BitcoinHttpClient
+    public class CoinDeskHttpClient : IBitcoinHttpClient
     {
-        public override string? ApiHostName => "CoinDesk";
+        public string? ApiHostName => "CoinDesk";
 
         private readonly ILogger<CoinDeskHttpClient> _logger;
         private readonly IMemoryCache _memoryCache;
@@ -26,7 +26,7 @@ namespace Services.HttpClientService
             _httpClient.BaseAddress = new Uri("https://api.coindesk.com/v1/bpi/currentprice.json");
         }
 
-        protected override async Task<RatesDto> GetIfExists()
+        public async Task<RatesDto> GetRates()
         {
             var ratesDto = new RatesDto();
             

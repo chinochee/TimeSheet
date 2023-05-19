@@ -7,9 +7,9 @@ using Services.Dtos;
 
 namespace Services.HttpClientService
 {
-    public class BlockchainInfoHttpClient : BitcoinHttpClient
+    public class BlockchainInfoHttpClient : IBitcoinHttpClient
     {
-        public override string? ApiHostName => "Blockchain";
+        public string? ApiHostName => "Blockchain";
 
         private readonly ILogger<BlockchainInfoHttpClient> _logger;
         private readonly IMemoryCache _memoryCache;
@@ -26,7 +26,7 @@ namespace Services.HttpClientService
             _httpClient.BaseAddress = new Uri("https://blockchain.info/ticker");
         }
 
-        protected override async Task<RatesDto> GetIfExists()
+        public async Task<RatesDto> GetRates()
         {
             var ratesDto = new RatesDto();
 
