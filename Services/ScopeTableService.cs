@@ -12,13 +12,13 @@ namespace Services
     {
         private readonly TableSettings _tableSettings;
         private readonly TimeSheetContext _context;
-        private readonly IBitcoinHttpClient _client;
+        private readonly IBitcoinClientFactory _clientFactory;
         private readonly ILogger<ScopeTableService> _logger;
-        public ScopeTableService(ILogger<ScopeTableService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClientService bitcoinHttpClientService)
+        public ScopeTableService(ILogger<ScopeTableService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinClientFactory bitcoinClientFactory)
         {
             _tableSettings = config.Value;
             _context = context;
-            _client = bitcoinHttpClientService.GetClient();
+            _clientFactory = bitcoinClientFactory;
             _logger = logger;
         }
 
@@ -26,7 +26,7 @@ namespace Services
 
         public async Task<ScopeEntryBTCDto[]> Get()
         {
-            var coinDeskTask = _client.GetRates();
+            var coinDeskTask = _clientFactory.GetClient().GetRates();
             var topScopesTask = GetAnnualTopUSD();
 
             await Task.WhenAll(coinDeskTask, topScopesTask);

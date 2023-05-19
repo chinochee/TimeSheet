@@ -1,6 +1,6 @@
 ﻿namespace Services.BitcoinHttpClientService
 {
-    public interface IBitcoinHttpClientService
+    public interface IBitcoinClientFactory
     {
         IBitcoinHttpClient GetClient();
     }

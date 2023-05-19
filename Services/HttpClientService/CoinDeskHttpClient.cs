@@ -1,52 +1,34 @@
-﻿using System.Net.Http.Json;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Services.Configuration;
+﻿using Microsoft.Extensions.Logging;
 using Services.Dtos;
+using System.Net.Http.Json;
 
 namespace Services.HttpClientService
 {
-    public class CoinDeskHttpClient : IBitcoinHttpClient
+    public class CoinDeskHttpClient : INamedBitcoinHttpClient
     {
         public string? ApiHostName => "CoinDesk";
 
         private readonly ILogger<CoinDeskHttpClient> _logger;
-        private readonly IMemoryCache _memoryCache;
         private readonly HttpClient _httpClient;
-        private readonly CacheSettings _cacheSettings;
 
-        public CoinDeskHttpClient(ILogger<CoinDeskHttpClient> logger, IOptionsMonitor<CacheSettings> config, IMemoryCache memoryCache, HttpClient httpClient)
+        public CoinDeskHttpClient(ILogger<CoinDeskHttpClient> logger, HttpClient httpClient)
         {
             _logger = logger;
-            _memoryCache = memoryCache;
             _httpClient = httpClient;
-            _cacheSettings = config.CurrentValue;
 
             _httpClient.BaseAddress = new Uri("https://api.coindesk.com/v1/bpi/currentprice.json");
         }
 
         public async Task<RatesDto> GetRates()
         {
-            var ratesDto = new RatesDto();
-            
-            if (!_memoryCache.TryGetValue("rate", out RatesDto cacheValue))
+            _logger.LogInformation("Request rates from CoinDesk API");
+            var result = await _httpClient.GetFromJsonAsync<CoinDesk>("");
+            _logger.LogInformation("Request rates from CoinDesk API Finished");
+
+            return new RatesDto
             {
-                _logger.LogInformation("Request rates from CoinDesk API");
-
-                var result = await _httpClient.GetFromJsonAsync<CoinDesk>("");
-                ratesDto.Rate = result.bpi.USD.rate_float;
-
-                _memoryCache.Set("rate", ratesDto, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(_cacheSettings.SecondsHoldCache)));
-
-                _logger.LogInformation("Request rates from CoinDesk API Finished");
-            }
-            else
-            {
-                ratesDto = cacheValue;
-            }
-
-            return ratesDto;
+                Rate = result.bpi.USD.rate_float
+            };
         }
 
         private class CoinDesk

@@ -1,22 +1,26 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Services.Configuration;
 
 namespace Services.BitcoinHttpClientService
 {
-    public class BitcoinClientFactory : IBitcoinHttpClientService
+    public class BitcoinClientFactory : IBitcoinClientFactory
     {
-        private readonly Dictionary<string, IBitcoinHttpClient> _clients;
+        private readonly Dictionary<string, INamedBitcoinHttpClient> _clients;
         private readonly CacheSettings _cacheSettings;
+        private readonly IMemoryCache _memoryCache;
 
-        public BitcoinClientFactory(IEnumerable<IBitcoinHttpClient> clients, IOptionsMonitor<CacheSettings> config)
+        public BitcoinClientFactory(IEnumerable<INamedBitcoinHttpClient> clients, IOptionsMonitor<CacheSettings> config, IMemoryCache memoryCache)
         {
             _clients = clients.ToDictionary(p => p.ApiHostName);
             _cacheSettings = config.CurrentValue;
+            _memoryCache = memoryCache;
         }
 
         public IBitcoinHttpClient GetClient()
         {
-            return _clients[_cacheSettings.ApiHostName];
+            var result = _clients[_cacheSettings.ApiHostName];
+            return new CachedBtcHttpClient(result, _cacheSettings, _memoryCache);
         }
     }
 }

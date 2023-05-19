@@ -1,52 +1,34 @@
-﻿using System.Net.Http.Json;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Services.Configuration;
+﻿using Microsoft.Extensions.Logging;
 using Services.Dtos;
+using System.Net.Http.Json;
 
 namespace Services.HttpClientService
 {
-    public class BlockchainInfoHttpClient : IBitcoinHttpClient
+    public class BlockchainInfoHttpClient : INamedBitcoinHttpClient
     {
         public string? ApiHostName => "Blockchain";
 
         private readonly ILogger<BlockchainInfoHttpClient> _logger;
-        private readonly IMemoryCache _memoryCache;
         private readonly HttpClient _httpClient;
-        private readonly CacheSettings _cacheSettings;
 
-        public BlockchainInfoHttpClient(ILogger<BlockchainInfoHttpClient> logger, IOptionsMonitor<CacheSettings> config, IMemoryCache memoryCache, HttpClient httpClient)
+        public BlockchainInfoHttpClient(ILogger<BlockchainInfoHttpClient> logger, HttpClient httpClient)
         {
             _logger = logger;
-            _memoryCache = memoryCache;
             _httpClient = httpClient;
-            _cacheSettings = config.CurrentValue;
 
             _httpClient.BaseAddress = new Uri("https://blockchain.info/ticker");
         }
 
         public async Task<RatesDto> GetRates()
         {
-            var ratesDto = new RatesDto();
+            _logger.LogInformation("Request rates from Blockchain API");
+            var result = await _httpClient.GetFromJsonAsync<BlockchainInfoDto>("");
+            _logger.LogInformation("Request rates from Blockchain API Finished");
 
-            if (!_memoryCache.TryGetValue("rate", out RatesDto cacheValue))
+            return new RatesDto
             {
-                _logger.LogInformation("Request rates from Blockchain API");
-
-                var result = await _httpClient.GetFromJsonAsync<BlockchainInfoDto>("");
-                ratesDto.Rate = result.USD.sell;
-
-                _memoryCache.Set("rate", ratesDto, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(_cacheSettings.SecondsHoldCache)));
-
-                _logger.LogInformation("Request rates from Blockchain API Finished");
-            }
-            else
-            {
-                ratesDto = cacheValue;
-            }
-
-            return ratesDto;
+                Rate = result.USD.sell
+            };
         }
 
         private class BlockchainInfoDto
