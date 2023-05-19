@@ -5,41 +5,41 @@ using Microsoft.Extensions.Options;
 using Services.Configuration;
 using Services.Dtos;
 
-namespace Services.BitcoinHttpClientService.Clients
+namespace Services.HttpClientService
 {
-    public class CoinDeskHttpClient : BitcoinHttpClient
+    public class BlockchainInfoHttpClient : BitcoinHttpClient
     {
-        public override string? ApiHostName => "CoinDesk";
+        public override string? ApiHostName => "Blockchain";
 
-        private readonly ILogger<CoinDeskHttpClient> _logger;
+        private readonly ILogger<BlockchainInfoHttpClient> _logger;
         private readonly IMemoryCache _memoryCache;
         private readonly HttpClient _httpClient;
         private readonly CacheSettings _cacheSettings;
 
-        public CoinDeskHttpClient(ILogger<CoinDeskHttpClient> logger, IOptionsMonitor<CacheSettings> config, IMemoryCache memoryCache, HttpClient httpClient)
+        public BlockchainInfoHttpClient(ILogger<BlockchainInfoHttpClient> logger, IOptionsMonitor<CacheSettings> config, IMemoryCache memoryCache, HttpClient httpClient)
         {
             _logger = logger;
             _memoryCache = memoryCache;
             _httpClient = httpClient;
             _cacheSettings = config.CurrentValue;
 
-            _httpClient.BaseAddress = new Uri("https://api.coindesk.com/v1/bpi/currentprice.json");
+            _httpClient.BaseAddress = new Uri("https://blockchain.info/ticker");
         }
 
         protected override async Task<RatesDto> GetIfExists()
         {
             var ratesDto = new RatesDto();
-            
+
             if (!_memoryCache.TryGetValue("rate", out RatesDto cacheValue))
             {
-                _logger.LogInformation("Request rates from CoinDesk API");
+                _logger.LogInformation("Request rates from Blockchain API");
 
-                var result = await _httpClient.GetFromJsonAsync<CoinDesk>("");
-                ratesDto.Rate = result.bpi.USD.rate_float;
+                var result = await _httpClient.GetFromJsonAsync<BlockchainInfoDto>("");
+                ratesDto.Rate = result.USD.sell;
 
                 _memoryCache.Set("rate", ratesDto, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(_cacheSettings.SecondsHoldCache)));
 
-                _logger.LogInformation("Request rates from CoinDesk API Finished");
+                _logger.LogInformation("Request rates from Blockchain API Finished");
             }
             else
             {
@@ -49,19 +49,14 @@ namespace Services.BitcoinHttpClientService.Clients
             return ratesDto;
         }
 
-        private class CoinDesk
+        private class BlockchainInfoDto
         {
-            public Bpi bpi { get; set; }
+            public BlockchainInfoRate USD { get; set; }
         }
 
-        private class Bpi
+        private class BlockchainInfoRate
         {
-            public BpiCurrency USD { get; set; }
-        }
-
-        private class BpiCurrency
-        {
-            public double rate_float { get; set; }
+            public double sell { get; set; }
         }
     }
 }

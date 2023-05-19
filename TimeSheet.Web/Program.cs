@@ -2,7 +2,7 @@ using Data;
 using Services;
 using Data.Persistence;
 using Services.Configuration;
-using Services.BitcoinHttpClientService.Clients;
+using Services.HttpClientService;
 
 var builder = WebApplication.CreateBuilder(args);
 

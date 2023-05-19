@@ -1,6 +1,6 @@
 ﻿using Services.Dtos;
 
-namespace Services.BitcoinHttpClientService.Clients
+namespace Services.HttpClientService
 {
     public abstract class BitcoinHttpClient : IBitcoinHttpClient
     {
