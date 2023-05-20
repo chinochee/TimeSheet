@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Services.BitcoinHttpClientService;
 using Services.Configuration;
 using Services.Dtos;
 
@@ -11,14 +12,14 @@ namespace Services
     {
         private readonly TimeSheetContext _context;
         private readonly TableSettings _tableSettings;
-        private readonly IBitcoinHttpClient _client;
+        private readonly IBitcoinClientFactory _clientFactory;
         private readonly ILogger<EmployeeService> _logger;
 
-        public EmployeeService(ILogger<EmployeeService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClient client)
+        public EmployeeService(ILogger<EmployeeService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinClientFactory clientFactory)
         {
             _tableSettings = config.Value;
             _context = context;
-            _client = client;
+            _clientFactory = clientFactory;
             _logger = logger;
         }
 
@@ -27,7 +28,7 @@ namespace Services
 
         public async Task<EmployeeEntryBTCDto[]> GetTopLastYearTimeSheet()
         {
-            var coinDeskTask =  _client.GetRates();
+            var coinDeskTask = _clientFactory.GetClient().GetRates();
             var topEmployeesTask = GetAnnualTopUSD();
 
             await Task.WhenAll(coinDeskTask, topEmployeesTask);
