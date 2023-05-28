@@ -10,6 +10,7 @@ namespace Data.Persistence
         public DbSet<Scope> Scopes { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public TimeSheetContext(DbContextOptions<TimeSheetContext> options)
         : base(options)
