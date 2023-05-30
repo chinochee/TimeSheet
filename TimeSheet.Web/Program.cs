@@ -2,6 +2,7 @@ using Data;
 using Services;
 using Data.Persistence;
 using Services.Configuration;
+using Services.HttpClientService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,10 @@ builder.Services.AddDataLayer(builder.Configuration)
     .AddServicesLayer(builder.Configuration);
 
 builder.Services.AddRazorPages();
-builder.Services.Configure<TableSettings>(
-    builder.Configuration.GetSection(TableSettings.Settings)); 
-builder.Services.AddHttpClient<IBitcoinHttpClient, CoinDeskHttpClient>();
+builder.Services.Configure<TableSettings>(builder.Configuration.GetSection(TableSettings.Settings));
+builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(CacheSettings.Settings));
+builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
+builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
 
 var app = builder.Build();
 
