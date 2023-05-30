@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Services.BitcoinHttpClientService;
 using Services.Configuration;
 using Services.Dtos;
 
@@ -12,13 +11,13 @@ namespace Services
     {
         private readonly TableSettings _tableSettings;
         private readonly TimeSheetContext _context;
-        private readonly IBitcoinClientFactory _clientFactory;
+        private readonly IBitcoinHttpClient _client;
         private readonly ILogger<ScopeTableService> _logger;
-        public ScopeTableService(ILogger<ScopeTableService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinClientFactory bitcoinClientFactory)
+        public ScopeTableService(ILogger<ScopeTableService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinHttpClient client)
         {
             _tableSettings = config.Value;
             _context = context;
-            _clientFactory = bitcoinClientFactory;
+            _client = client;
             _logger = logger;
         }
 
@@ -26,7 +25,7 @@ namespace Services
 
         public async Task<ScopeEntryBTCDto[]> Get()
         {
-            var coinDeskTask = _clientFactory.GetClient().GetRates();
+            var coinDeskTask = _client.GetRates();
             var topScopesTask = GetAnnualTopUSD();
 
             await Task.WhenAll(coinDeskTask, topScopesTask);

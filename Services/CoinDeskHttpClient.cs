@@ -1,13 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using Services.Dtos;
 using System.Net.Http.Json;
+using Services.Dtos;
 
-namespace Services.HttpClientService
+namespace Services
 {
-    public class CoinDeskHttpClient : INamedBitcoinHttpClient
+    public class CoinDeskHttpClient : IBitcoinHttpClient
     {
-        public string? ApiHostName => "CoinDesk";
-
         private readonly ILogger<CoinDeskHttpClient> _logger;
         private readonly HttpClient _httpClient;
 

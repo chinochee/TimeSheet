@@ -7,18 +7,20 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly ILogger<EmployeeController> _logger;
         private readonly IEmployeeService _employeeTableService;
+        private readonly IBitcoinHttpClient _client;
 
-        public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService employeeTableService)
+        public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService employeeTableService, IBitcoinHttpClient client)
         {
             _logger = logger;
             _employeeTableService = employeeTableService;
+            _client = client;
         }
 
         [HttpGet]
         public async Task<IActionResult> Employees()
         {
-            var employes = await _employeeTableService.GetTopLastYearTimeSheet();
-            return View(employes);
+            var scopes = await _employeeTableService.GetTopLastYearTimeSheet();
+            return View(scopes);
         }
     }
 }
