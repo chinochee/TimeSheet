@@ -109,30 +109,6 @@ namespace Data.Migrations
                     b.ToTable("TimeSheets");
                 });
 
-            modelBuilder.Entity("Data.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("Data.Entities.Scope", b =>
                 {
                     b.HasOne("Data.Entities.Currency", "Currency")
@@ -161,17 +137,6 @@ namespace Data.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Scope");
-                });
-
-            modelBuilder.Entity("Data.Entities.User", b =>
-                {
-                    b.HasOne("Data.Entities.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Data.Entities.Employee", b =>
