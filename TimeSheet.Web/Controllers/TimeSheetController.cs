@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services;
 using Services.Dtos;
@@ -21,6 +22,7 @@ namespace TimeSheet.Web.Controllers
             _scopeTableService = scopeTableService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> TimeSheets([FromQuery] TimeSheetsFiltersModel filters)
         {

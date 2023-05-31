@@ -3,6 +3,7 @@ using Services;
 using Data.Persistence;
 using Services.Configuration;
 using Services.HttpClientService;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.Configure<TableSettings>(builder.Configuration.GetSection(Table
 builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(CacheSettings.Settings));
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -31,10 +36,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+        name: "default",
+        pattern: "{controller=Account}/{action=Login}")
+    .RequireAuthorization();
 
 app.Run();
