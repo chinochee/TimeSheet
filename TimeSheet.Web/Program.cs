@@ -18,7 +18,7 @@ builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+    .AddCookie();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
