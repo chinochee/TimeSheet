@@ -41,7 +41,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Account}/{action=Login}")
+        pattern: "{controller=TimeSheet}/{action=TimeSheets}")
     .RequireAuthorization();
 
 app.Run();
