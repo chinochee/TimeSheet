@@ -1,29 +1,46 @@
-﻿using Data.Persistence;
+﻿using Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Services.Dtos;
 
 namespace Services
 {
-    internal class AccountService : IAccountService
+    public class AccountService : IAccountService
     {
-        private readonly TimeSheetContext _context;
         private readonly ILogger<AccountService> _logger;
+        private readonly UserManager<Employee> _userManager;
 
-        public AccountService(ILogger<AccountService> logger, TimeSheetContext context)
+        public AccountService(ILogger<AccountService> logger, UserManager<Employee> userManager)
         {
-            _context = context;
             _logger = logger;
+            _userManager = userManager;
         }
 
-        public async Task EditEmployee(LoginEditDto userEdit)
+        public async Task ChangePassword(LoginEditDto userEdit)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Name == userEdit.Name);
-            user.UserName = userEdit.UserName;
-            user.PasswordHash = userEdit.Password;
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userEdit.UserName);
 
-            _context.Users.Update(user);
+                if (user is null) { return; }
 
-            await _context.SaveChangesAsync();
+                if (string.IsNullOrEmpty(user.UserName))
+                    await _userManager.SetUserNameAsync(user, userEdit.UserName);
+
+                var passToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var result = await _userManager.ResetPasswordAsync(user, passToken, userEdit.NewPassword);
+
+                if (result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                        _logger.LogWarning($"{error.Description} ({error.Code})");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("LogError {0}", ex.Message);
+            }
         }
     }
 }
