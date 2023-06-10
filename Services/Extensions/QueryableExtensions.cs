@@ -2,7 +2,7 @@
 
 namespace Services.Extensions
 {
-    public static class QuerybleExtensions
+    public static class QueryableExtensions
     {
         public static IQueryable<TSource> WhereIf<TSource>(
             this IQueryable<TSource> source,
