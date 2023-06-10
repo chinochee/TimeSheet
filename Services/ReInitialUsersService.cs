@@ -21,18 +21,22 @@ namespace Services
 
         public async Task ReInitializeUsers()
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
                 var timeSheets = await _context.TimeSheets.ToArrayAsync();
 
-                var users = await _userManager.Users.Where(u => String.IsNullOrEmpty(u.UserName) && String.IsNullOrEmpty(u.PasswordHash)).ToListAsync();
+                var users = await _userManager.Users
+                    .Where(u => String.IsNullOrEmpty(u.UserName) && String.IsNullOrEmpty(u.PasswordHash))
+                    .ToListAsync();
 
                 foreach (var user in users)
                 {
                     await _userManager.DeleteAsync(user);
 
                     user.UserName = $"{user.Name}Login";
-                    
+
                     var result = await _userManager.CreateAsync(user, $"{user.Name}Pass1!");
 
                     if (result.Succeeded) continue;
@@ -42,9 +46,14 @@ namespace Services
                 }
 
                 await _context.TimeSheets.AddRangeAsync(timeSheets);
+
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 _logger.LogError("LogError {0}", ex.Message);
             }
         }
