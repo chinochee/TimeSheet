@@ -25,7 +25,7 @@ namespace Services
 
             try
             {
-                var timeSheets = await _context.TimeSheets.ToArrayAsync();
+                var timeSheets = await _context.TimeSheets.ToListAsync();
 
                 var users = await _userManager.Users
                     .Where(u => String.IsNullOrEmpty(u.UserName) && String.IsNullOrEmpty(u.PasswordHash))
@@ -46,8 +46,6 @@ namespace Services
                 }
 
                 await _context.TimeSheets.AddRangeAsync(timeSheets);
-
-                await _context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
             }
