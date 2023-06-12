@@ -22,7 +22,7 @@ namespace Services
             _logger = logger;
         }
 
-        public async Task<Dictionary<int, string>> GetDictionary() => await _context.Scopes.ToDictionaryAsync(s => s.Id, s => s.Name);
+        public async Task<Dictionary<int, string?>> GetDictionary() => await _context.Scopes.ToDictionaryAsync(s => s.Id, s => s.Name);
 
         public async Task<ScopeEntryBTCDto[]> Get()
         {
