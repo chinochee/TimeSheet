@@ -17,6 +17,7 @@ namespace Services
             services.AddScoped<IBitcoinClientFactory, BitcoinClientFactory>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IReInitialUsersService, ReInitialUsersService>();
+            services.AddSingleton<IRequestLogger, RequestLogger>();
             services.AddMemoryCache();
 
             return services;

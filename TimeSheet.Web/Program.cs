@@ -3,7 +3,6 @@ using Data.Persistence;
 using Services;
 using Services.Configuration;
 using Services.HttpClientService;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +45,7 @@ app.MapControllerRoute(
         pattern: "{controller=TimeSheet}/{action=TimeSheets}")
 .RequireAuthorization();
 
-app.Use(TimeWorkRequestLogger);
+app.Use(app.Services.GetRequiredService<IRequestLogger>().TimeWork);
 
 var initialUserSettings = app.Configuration.GetSection(InitialUsersSettings.Settings).Get(typeof(InitialUsersSettings)) as InitialUsersSettings;
 if (initialUserSettings.NeedReInitialUsers)
@@ -59,14 +58,3 @@ if (initialUserSettings.NeedReInitialUsers)
 }
 
 app.Run();
-
-async Task TimeWorkRequestLogger(HttpContext context, Func<Task> next)
-{
-    var startTime = Stopwatch.GetTimestamp();
-
-    await next.Invoke();
-
-    var elapsedTime = Stopwatch.GetElapsedTime(startTime);
-
-    app.Logger.LogInformation("Request completed in {0} milliseconds", elapsedTime.Milliseconds);
-}
