@@ -28,9 +28,9 @@ namespace TimeSheet.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public Task<IActionResult> Login()
+        public async Task<IActionResult> Login()
         {
-            return Task.FromResult<IActionResult>(View());
+            return View();
         }
 
         [AllowAnonymous]
@@ -59,9 +59,9 @@ namespace TimeSheet.Web.Controllers
         }
         
         [HttpGet]
-        public Task<IActionResult> ChangePassword()
+        public async Task<IActionResult> ChangePassword()
         {
-            return Task.FromResult<IActionResult>(View());
+            return View();
         }
         
         [HttpPost]
