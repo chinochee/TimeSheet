@@ -13,7 +13,6 @@ builder.Services.AddDataLayer(builder.Configuration)
 builder.Services.AddRazorPages();
 builder.Services.Configure<TableSettings>(builder.Configuration.GetSection(TableSettings.Settings));
 builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(CacheSettings.Settings));
-builder.Services.Configure<InitialUsersSettings>(builder.Configuration.GetSection(InitialUsersSettings.Settings));
 builder.Services.Configure<CookieSettings>(builder.Configuration.GetSection(CookieSettings.Settings));
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
@@ -47,8 +46,7 @@ app.MapControllerRoute(
 
 app.Use(app.Services.GetRequiredService<IRequestLogger>().TimeWork);
 
-var initialUserSettings = app.Configuration.GetSection(InitialUsersSettings.Settings).Get(typeof(InitialUsersSettings)) as InitialUsersSettings;
-if (initialUserSettings.NeedReInitialUsers)
+if (app.Configuration.GetValue<bool>("NeedReInitialUsers"))
 {
     var provider = app.Services.GetRequiredService<IServiceProvider>();
 
