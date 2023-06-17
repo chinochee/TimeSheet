@@ -3,6 +3,8 @@ using Data.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Services.Configuration;
 
 namespace Services
 {
@@ -11,12 +13,14 @@ namespace Services
         private readonly ILogger<ReInitialUsersService> _logger;
         private readonly UserManager<Employee> _userManager;
         private readonly TimeSheetContext _context;
+        private readonly BaseUserCredis _baseUserCredis;
 
-        public ReInitialUsersService(ILogger<ReInitialUsersService> logger, UserManager<Employee> userManager, TimeSheetContext context)
+        public ReInitialUsersService(ILogger<ReInitialUsersService> logger, UserManager<Employee> userManager, TimeSheetContext context, IOptions<BaseUserCredis> config)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
+            _baseUserCredis = config.Value;
         }
 
         public async Task ReInitializeUsers()
@@ -35,9 +39,9 @@ namespace Services
                 {
                     await _userManager.DeleteAsync(user);
 
-                    user.UserName = $"{user.Name}Login";
+                    user.UserName = $"{user.Name}{_baseUserCredis.Login}";
 
-                    var result = await _userManager.CreateAsync(user, $"{user.Name}Pass1!");
+                    var result = await _userManager.CreateAsync(user, $"{user.Name}{_baseUserCredis.Password}");
 
                     if (result.Succeeded) continue;
 
