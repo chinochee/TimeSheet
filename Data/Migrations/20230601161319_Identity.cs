@@ -182,6 +182,13 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET DateOfWorks = '2023-06-11' WHERE Id = 6");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET DateOfWorks = '2023-06-12' WHERE Id = 7");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET DateOfWorks = '2023-06-13' WHERE Id = 8");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET DateOfWorks = '2023-06-14' WHERE Id = 9");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET DateOfWorks = '2023-06-15' WHERE Id = 10");
+            migrationBuilder.Sql(@"UPDATE TimeSheets SET DateOfWorks = '2023-06-16' WHERE Id = 11");
+
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
