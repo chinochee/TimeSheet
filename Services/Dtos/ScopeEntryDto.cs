@@ -15,6 +15,7 @@
         {
             Id = other.Id;
             Name = other.Name;
+            NameCurrency = other.NameCurrency;
             TotalPrice = other.TotalPrice;
             TotalPriceUSD = Math.Round(other.TotalPriceUSD, 2);
             TotalPriceInBTC = Math.Round(other.TotalPriceUSD / btcRate, 2);
