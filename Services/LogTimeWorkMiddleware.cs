@@ -4,20 +4,19 @@ using System.Diagnostics;
 
 namespace Services
 {
-    public class RequestLogger : IRequestLogger
+    public class LogTimeWorkMiddleware : IMiddleware
     {
-        private readonly ILogger<RequestLogger> _logger;
-
-        public RequestLogger(ILogger<RequestLogger> logger)
+        private readonly ILogger<LogTimeWorkMiddleware> _logger;
+        public LogTimeWorkMiddleware(ILogger<LogTimeWorkMiddleware> logger)
         {
             _logger = logger;
         }
 
-        public async Task TimeWork(HttpContext context, Func<Task> next)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             var startTime = Stopwatch.GetTimestamp();
 
-            await next.Invoke();
+            await next(context);
 
             var elapsedTime = Stopwatch.GetElapsedTime(startTime);
 

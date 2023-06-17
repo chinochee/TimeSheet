@@ -45,7 +45,7 @@ app.MapControllerRoute(
         pattern: "{controller=TimeSheet}/{action=TimeSheets}")
 .RequireAuthorization();
 
-app.Use(app.Services.GetRequiredService<IRequestLogger>().TimeWork);
+app.UseMiddleware<IMiddleware>();
 
 if (app.Configuration.GetValue<bool>("NeedReInitialUsers"))
 {
