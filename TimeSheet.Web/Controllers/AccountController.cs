@@ -65,7 +65,7 @@ namespace TimeSheet.Web.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(LoginEditDto user)
+        public async Task<IActionResult> ChangePassword(LoginEntryDto user)
         {
             await _accountService.ChangePassword(user);
             return View();

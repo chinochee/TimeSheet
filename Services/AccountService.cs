@@ -16,7 +16,7 @@ namespace Services
             _userManager = userManager;
         }
 
-        public async Task ChangePassword(LoginEditDto userEdit)
+        public async Task ChangePassword(LoginEntryDto userEdit)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace Services
 
                 var passToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-                var result = await _userManager.ResetPasswordAsync(user, passToken, userEdit.NewPassword);
+                var result = await _userManager.ResetPasswordAsync(user, passToken, userEdit.Password);
 
                 if (result.Succeeded)
                 {
