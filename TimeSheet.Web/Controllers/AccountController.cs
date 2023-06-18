@@ -9,7 +9,6 @@ using Services;
 using Services.Configuration;
 using Services.Dtos;
 using System.Security.Claims;
-using TimeSheet.Web.Models;
 
 namespace TimeSheet.Web.Controllers
 {
