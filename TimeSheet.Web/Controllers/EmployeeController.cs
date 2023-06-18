@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 
 namespace TimeSheet.Web.Controllers
 {
+    [Authorize(Roles = "Admin, HR, Manager")]
     public class EmployeeController : Controller
     {
         private readonly ILogger<EmployeeController> _logger;

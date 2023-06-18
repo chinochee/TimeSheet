@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 
 namespace TimeSheet.Web.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class ScopeController : Controller
     {
         private readonly ILogger<ScopeController> _logger;

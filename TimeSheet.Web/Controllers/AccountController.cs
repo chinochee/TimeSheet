@@ -19,14 +19,16 @@ namespace TimeSheet.Web.Controllers
         private readonly SignInManager<Employee> _signInManager;
         private readonly CookieSettings _tableSettings;
         private readonly IEmployeeService _employeeService;
+        private readonly IRoleService _roleService;
 
-        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IOptions<CookieSettings> config, IEmployeeService employeeService)
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IOptions<CookieSettings> config, IEmployeeService employeeService, IRoleService roleService)
         {
             _logger = logger;
             _accountService = accountService;
             _signInManager = signInManager;
             _tableSettings = config.Value;
             _employeeService = employeeService;
+            _roleService = roleService;
         }
 
         [AllowAnonymous]
@@ -42,11 +44,15 @@ namespace TimeSheet.Web.Controllers
         {
             if (login.UserName is null || login.Password is null) { return View(); }
 
-            var result = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);
+            var signInResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);
 
-            if (!result.Succeeded) { return View(); }
-
-            var claims = new List<Claim> { new(ClaimTypes.Name, login.UserName) };
+            if (!signInResult.Succeeded) { return View(); }
+            
+            var claims = new List<Claim> 
+            { 
+                new(ClaimTypes.Name, login.UserName),
+                new (ClaimsIdentity.DefaultRoleClaimType, await _roleService.GetRoleNameByUserName(login.UserName))
+            };
             var identity = new ClaimsIdentity(claims, _tableSettings.AuthenticationScheme);
 
             await HttpContext.SignInAsync(_tableSettings.AuthenticationScheme, new ClaimsPrincipal(identity));
@@ -60,7 +66,8 @@ namespace TimeSheet.Web.Controllers
             await HttpContext.SignOutAsync(_tableSettings.AuthenticationScheme);
             return RedirectToAction(nameof(Login));
         }
-        
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {
@@ -74,7 +81,8 @@ namespace TimeSheet.Web.Controllers
 
             return View();
         }
-        
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(LoginEditDto userEdit)
         {

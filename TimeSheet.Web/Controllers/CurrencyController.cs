@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Helpers;
 
 namespace TimeSheet.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CurrencyController : Controller
     {
         private readonly ILogger<CurrencyController> _logger;
