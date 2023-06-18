@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using Services;
 using Services.Configuration;
@@ -62,14 +63,27 @@ namespace TimeSheet.Web.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> ChangePassword([FromQuery] ChangePasswordModel dataChangePassword)
+        public async Task<IActionResult> ChangePassword()
         {
-            if (dataChangePassword.Login != null) 
-                await _accountService.ChangePassword(dataChangePassword.Login);
-
             var employees = await _employeeService.Get();
 
-            return View(new ChangePasswordModel(employees));
+            ViewBag.Employees = employees.Select(t => new SelectListItem
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            });
+
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(LoginEditDto userEdit)
+        {
+            if (userEdit.EmployeeId == 0 || userEdit.Password == null) { return RedirectToAction(nameof(ChangePassword)); }
+
+            await _accountService.ChangePassword(userEdit);
+
+            return RedirectToAction(nameof(ChangePassword));
         }
     }
 }
