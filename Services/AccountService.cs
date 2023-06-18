@@ -16,16 +16,13 @@ namespace Services
             _userManager = userManager;
         }
 
-        public async Task ChangePassword(LoginEntryDto userEdit)
+        public async Task ChangePassword(LoginEditDto userEdit)
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(userEdit.UserName);
+                var user = await _userManager.FindByIdAsync(userEdit.EmployeeId.ToString());
 
                 if (user is null) { return; }
-
-                if (string.IsNullOrEmpty(user.UserName))
-                    await _userManager.SetUserNameAsync(user, userEdit.UserName);
 
                 var passToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 

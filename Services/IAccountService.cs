@@ -4,6 +4,6 @@ namespace Services
 {
     public interface IAccountService
     {
-        public Task ChangePassword(LoginEntryDto userEdit);
+        public Task ChangePassword(LoginEditDto userEdit);
     }
 }

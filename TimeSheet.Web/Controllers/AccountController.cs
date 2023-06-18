@@ -8,6 +8,7 @@ using Services;
 using Services.Configuration;
 using Services.Dtos;
 using System.Security.Claims;
+using TimeSheet.Web.Models;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -17,13 +18,15 @@ namespace TimeSheet.Web.Controllers
         private readonly IAccountService _accountService;
         private readonly SignInManager<Employee> _signInManager;
         private readonly CookieSettings _tableSettings;
+        private readonly IEmployeeService _employeeService;
 
-        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IOptions<CookieSettings> config)
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IOptions<CookieSettings> config, IEmployeeService employeeService)
         {
             _logger = logger;
             _accountService = accountService;
             _signInManager = signInManager;
             _tableSettings = config.Value;
+            _employeeService = employeeService;
         }
 
         [AllowAnonymous]
@@ -59,16 +62,14 @@ namespace TimeSheet.Web.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> ChangePassword()
+        public async Task<IActionResult> ChangePassword([FromQuery] ChangePasswordModel dataChangePassword)
         {
-            return View();
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword(LoginEntryDto user)
-        {
-            await _accountService.ChangePassword(user);
-            return View();
+            if (dataChangePassword.Login != null) 
+                await _accountService.ChangePassword(dataChangePassword.Login);
+
+            var employees = await _employeeService.Get();
+
+            return View(new ChangePasswordModel(employees));
         }
     }
 }
