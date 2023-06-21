@@ -16,12 +16,11 @@ builder.Services.AddDataLayer(builder.Configuration)
 builder.Services.AddRazorPages();
 builder.Services.Configure<TableSettings>(builder.Configuration.GetSection(TableSettings.Settings));
 builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(CacheSettings.Settings));
-builder.Services.Configure<CookieSettings>(builder.Configuration.GetSection(CookieSettings.Settings));
 builder.Services.Configure<BaseUserCredis>(builder.Configuration.GetSection(BaseUserCredis.Credits));
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
 
-builder.Services.AddAuthentication().AddCookie("Identity.Application");
+builder.Services.AddAuthentication().AddCookie(CookieSettingsConstant.AuthenticationScheme);
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
