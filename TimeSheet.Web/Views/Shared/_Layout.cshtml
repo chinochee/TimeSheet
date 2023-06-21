@@ -26,28 +26,30 @@
 
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Any(c => c.Value == "Employee" | c.Value == "Manager" | c.Value == "Admin"))
+                            var userRoles = User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Select(claim => claim.Value).ToList();
+
+                            if (userRoles.Contains("Employee"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="TimeSheet" asp-action="Create">Time sheet adding window</a>
                                 </li>
                             }
 
-                            if (User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Any(c => c.Value == "Manager" | c.Value == "Admin"))
+                            if (userRoles.Contains("Manager"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Scope" asp-action="Scopes">All-time Spending</a>
                                 </li>
                             }
 
-                            if (User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Any(c => c.Value == "HR" | c.Value == "Manager" | c.Value == "Admin"))
+                            if (userRoles.Contains("HR"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Employees">Annual Spending</a>
                                 </li>
                             }
 
-                            if (User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Any(c => c.Value == "Admin"))
+                            if (userRoles.Contains("Admin"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Currency" asp-action="Currencies">Exchange rates</a>
