@@ -18,7 +18,7 @@ builder.Services.Configure<BaseUserCredis>(builder.Configuration.GetSection(Base
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
 
-builder.Services.AddAuthentication().AddCookie(builder.Configuration.GetValue<string>(CookieSettings.Settings + ":AuthenticationScheme"));
+builder.Services.AddAuthentication().AddCookie("Identity.Application");
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
