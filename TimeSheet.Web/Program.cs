@@ -4,6 +4,9 @@ using Services;
 using Services.Configuration;
 using Services.HttpClientService;
 
+var dirInfo = new DirectoryInfo(@"C:\Lessons\TimeSheet");
+dirInfo.CreateSubdirectory(@"TimeSheetDataBaseHolder");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
