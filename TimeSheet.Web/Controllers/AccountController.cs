@@ -50,9 +50,13 @@ namespace TimeSheet.Web.Controllers
             
             var claims = new List<Claim> 
             { 
-                new(ClaimTypes.Name, login.UserName),
-                new (ClaimsIdentity.DefaultRoleClaimType, await _roleService.GetRoleNameByUserName(login.UserName))
+                new(ClaimTypes.Name, login.UserName)
             };
+
+            var roleList = await _roleService.GetRolesNameByUserName(login.UserName);
+
+            claims.AddRange(roleList.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
+
             var identity = new ClaimsIdentity(claims, _tableSettings.AuthenticationScheme);
 
             await HttpContext.SignInAsync(_tableSettings.AuthenticationScheme, new ClaimsPrincipal(identity));

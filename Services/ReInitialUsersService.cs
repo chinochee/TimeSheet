@@ -13,14 +13,14 @@ namespace Services
         private readonly ILogger<ReInitialUsersService> _logger;
         private readonly UserManager<Employee> _userManager;
         private readonly TimeSheetContext _context;
-        private readonly BaseUserCredis _baseUserCredis;
+        private readonly BaseUserCredis _baseUserCredits;
 
         public ReInitialUsersService(ILogger<ReInitialUsersService> logger, UserManager<Employee> userManager, TimeSheetContext context, IOptions<BaseUserCredis> config)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
-            _baseUserCredis = config.Value;
+            _baseUserCredits = config.Value;
         }
 
         public async Task ReInitializeUsers()
@@ -29,27 +29,25 @@ namespace Services
 
             try
             {
-                var timeSheets = await _context.TimeSheets.ToListAsync();
-
                 var users = await _userManager.Users
                     .Where(u => String.IsNullOrEmpty(u.UserName) && String.IsNullOrEmpty(u.PasswordHash))
+                    .Include(u => u.RoleList)
+                    .Include(t => t.TimeSheetList)
                     .ToListAsync();
 
                 foreach (var user in users)
                 {
                     await _userManager.DeleteAsync(user);
 
-                    user.UserName = $"{user.Name}{_baseUserCredis.Login}";
+                    user.UserName = $"{user.Name}{_baseUserCredits.Login}";
 
-                    var result = await _userManager.CreateAsync(user, $"{user.Name}{_baseUserCredis.Password}");
+                    var result = await _userManager.CreateAsync(user, $"{user.Name}{_baseUserCredits.Password}");
 
                     if (result.Succeeded) continue;
 
                     foreach (var error in result.Errors)
                         _logger.LogWarning($"{error.Description} ({error.Code})");
                 }
-
-                await _context.TimeSheets.AddRangeAsync(timeSheets);
 
                 await transaction.CommitAsync();
             }

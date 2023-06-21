@@ -35,7 +35,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Employee", b =>
@@ -85,9 +85,6 @@ namespace Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
@@ -107,8 +104,6 @@ namespace Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -124,7 +119,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Scope", b =>
@@ -146,7 +141,7 @@ namespace Data.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("Scopes");
+                    b.ToTable("Scopes", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.TimeSheet", b =>
@@ -180,7 +175,22 @@ namespace Data.Migrations
 
                     b.HasIndex("ScopeId");
 
-                    b.ToTable("TimeSheets");
+                    b.ToTable("TimeSheets", (string)null);
+                });
+
+            modelBuilder.Entity("EmployeeRole", b =>
+                {
+                    b.Property<int>("EmployeeListId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RoleListId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EmployeeListId", "RoleListId");
+
+                    b.HasIndex("RoleListId");
+
+                    b.ToTable("EmployeeRole", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -245,17 +255,6 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.Employee", b =>
-                {
-                    b.HasOne("Data.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Data.Entities.Scope", b =>
                 {
                     b.HasOne("Data.Entities.Currency", "Currency")
@@ -284,6 +283,21 @@ namespace Data.Migrations
                     b.Navigation("Employee");
 
                     b.Navigation("Scope");
+                });
+
+            modelBuilder.Entity("EmployeeRole", b =>
+                {
+                    b.HasOne("Data.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeeListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>

@@ -9,6 +9,8 @@ namespace Data.Persistence
         public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.HasKey(t => t.Id);
+            builder.HasMany(e => e.EmployeeList)
+                .WithMany(t => t.RoleList);
         }
     }
 }
