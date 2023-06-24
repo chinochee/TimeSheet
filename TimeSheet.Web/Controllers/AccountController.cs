@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Options;
 using Services;
 using Services.Configuration;
 using Services.Dtos;
@@ -17,16 +16,14 @@ namespace TimeSheet.Web.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountService _accountService;
         private readonly SignInManager<Employee> _signInManager;
-        private readonly CookieSettings _tableSettings;
         private readonly IEmployeeService _employeeService;
         private readonly IRoleService _roleService;
-
-        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IOptions<CookieSettings> config, IEmployeeService employeeService, IRoleService roleService)
+        
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IEmployeeService employeeService, IRoleService roleService)
         {
             _logger = logger;
             _accountService = accountService;
             _signInManager = signInManager;
-            _tableSettings = config.Value;
             _employeeService = employeeService;
             _roleService = roleService;
         }
@@ -56,10 +53,10 @@ namespace TimeSheet.Web.Controllers
             var roleList = await _roleService.GetRolesNameByUserName(login.UserName);
 
             claims.AddRange(roleList.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
+            
+            var identity = new ClaimsIdentity(claims, CookieSettingsConstant.AuthenticationScheme);
 
-            var identity = new ClaimsIdentity(claims, _tableSettings.AuthenticationScheme);
-
-            await HttpContext.SignInAsync(_tableSettings.AuthenticationScheme, new ClaimsPrincipal(identity));
+            await HttpContext.SignInAsync(CookieSettingsConstant.AuthenticationScheme, new ClaimsPrincipal(identity));
 
             return RedirectToAction("TimeSheets","TimeSheet");
         }
@@ -67,7 +64,7 @@ namespace TimeSheet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(_tableSettings.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieSettingsConstant.AuthenticationScheme);
             return RedirectToAction(nameof(Login));
         }
 
