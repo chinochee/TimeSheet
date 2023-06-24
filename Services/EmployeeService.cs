@@ -23,7 +23,7 @@ namespace Services
             _logger = logger;
         }
 
-        public async Task<EmployeeEntryDto[]> Get() => await _context.Employees
+        public async Task<EmployeeEntryDto[]> Get() => await _context.Users
             .Select(e => new EmployeeEntryDto { Id = e.Id, Name = e.Name }).ToArrayAsync();
 
         public async Task<EmployeeEntryBTCDto[]> GetTopLastYearTimeSheet()
@@ -43,7 +43,7 @@ namespace Services
         {
             _logger.LogInformation("Get top employees from db");
 
-            var result = await _context.Employees.Select(e => new EmployeeEntryDto
+            var result = await _context.Users.Select(e => new EmployeeEntryDto
             {
                 Id = e.Id,
                 Name = e.Name,

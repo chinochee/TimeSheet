@@ -1,8 +1,9 @@
-﻿namespace Data.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Data.Entities
 {
-    public class Employee
+    public class Employee : IdentityUser<int>
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<TimeSheet> TimeSheetList { get; set; }
     }

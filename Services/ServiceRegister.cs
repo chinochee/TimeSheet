@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services.BitcoinHttpClientService;
 
@@ -15,6 +16,9 @@ namespace Services
             services.AddScoped<ICurrencyExportService, CurrencyExportService>();
             services.AddScoped<ICurrencyImportService, CurrencyImportService>();
             services.AddScoped<IBitcoinClientFactory, BitcoinClientFactory>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IReInitialUsersService, ReInitialUsersService>();
+            services.AddSingleton<IMiddleware, LogTimeWorkMiddleware>();
             services.AddMemoryCache();
 
             return services;

@@ -9,8 +9,9 @@ namespace Data.Persistence
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.HasKey(t => t.Id);
-            builder.HasMany(c => c.TimeSheetList)
-                .WithOne()
+            builder.HasMany(e => e.TimeSheetList)
+                .WithOne(t => t.Employee)
+                .HasForeignKey(t => t.EmployeeId)
                 .IsRequired();
         }
     }
