@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Services.Dtos.CurrencyEntryDto>
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<Services.Dtos.CurrencyEntryDto>
 
 <table class="table">
     <thead>
@@ -37,9 +39,13 @@
     <input type="submit" value="Export currencies" />
 }
 
-<br>
-<h3>Select file to upload</h3>
-<form asp-action="OnPostCurrencies" asp-controller="Currency" method="post" enctype="multipart/form-data">
-    <input type="file" name="uploadedFile" /><br>
-    <input type="submit" value="Upload" />
-</form>
+@if (User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Select(claim => claim.Value).ToList().Contains("Admin"))
+{
+    <br>
+    <h3>Select file to upload</h3>
+    <form asp-action="OnPostCurrencies" asp-controller="Currency" method="post" enctype="multipart/form-data">
+        <input type="file" name="uploadedFile" /><br>
+        <input type="submit" value="Upload" />
+    </form>
+
+}

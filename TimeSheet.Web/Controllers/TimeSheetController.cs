@@ -32,7 +32,7 @@ namespace TimeSheet.Web.Controllers
             return View(new TimeSheetTableModel(tableDto, filters, employees));
         }
 
-        [Authorize(Roles = "Admin, Manager, Employee")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -54,7 +54,7 @@ namespace TimeSheet.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin, Manager, Employee")]
+        [Authorize(Roles = "Manager, Employee")]
         [HttpPost]
         public async Task<IActionResult> Create(TimeSheetCreateDto timeSheet)
         {

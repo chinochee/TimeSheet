@@ -5,7 +5,6 @@ using Services.Helpers;
 
 namespace TimeSheet.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class CurrencyController : Controller
     {
         private readonly ILogger<CurrencyController> _logger;
@@ -21,6 +20,7 @@ namespace TimeSheet.Web.Controllers
             _currencyImportService = currencyImportService;
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> Currencies()
         {
@@ -28,6 +28,7 @@ namespace TimeSheet.Web.Controllers
             return View(currencies);
         }
 
+        [Authorize(Roles = "Manager")]
         [HttpGet]
         public async Task<IActionResult> OnGetCurrencies()
         {
@@ -35,6 +36,7 @@ namespace TimeSheet.Web.Controllers
             return File(currencies.AsMemoryStream().ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExchangeRates.xlsx");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> OnPostCurrencies(IFormFile uploadedFile)
         {
