@@ -6,7 +6,7 @@ namespace Services.HttpClientService
 {
     public class BlockchainInfoHttpClient : INamedBitcoinHttpClient
     {
-        public string? ApiHostName => "Blockchain";
+        public string ApiHostName => "Blockchain";
 
         private readonly ILogger<BlockchainInfoHttpClient> _logger;
         private readonly HttpClient _httpClient;
@@ -22,7 +22,9 @@ namespace Services.HttpClientService
         public async Task<RatesDto> GetRates()
         {
             _logger.LogInformation("Request rates from Blockchain API");
+
             var result = await _httpClient.GetFromJsonAsync<BlockchainInfoDto>("");
+
             _logger.LogInformation("Request rates from Blockchain API Finished");
 
             return new RatesDto
