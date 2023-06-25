@@ -23,38 +23,70 @@ namespace Services
             _logger = logger;
         }
 
-        public async Task<EmployeeEntryDto[]> Get() => await _context.Users
-            .Select(e => new EmployeeEntryDto { Id = e.Id, Name = e.Name }).ToArrayAsync();
+        public async Task<EmployeeEntryDto[]> Get()
+        {
+            try
+            {
+                var result = await _context.Users
+                    .Select(e => new EmployeeEntryDto { Id = e.Id, Name = e.Name }).ToArrayAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("LogError {0}", ex.Message);
+            }
+
+            return null;
+        }
 
         public async Task<EmployeeEntryBTCDto[]> GetTopLastYearTimeSheet()
         {
-            var coinDeskTask = _clientFactory.GetClient().GetRates();
-            var topEmployeesTask = GetAnnualTopUSD();
+            try
+            {
+                var coinDeskTask = _clientFactory.GetClient().GetRates();
+                var topEmployeesTask = GetAnnualTopUSD();
 
-            await Task.WhenAll(coinDeskTask, topEmployeesTask);
+                await Task.WhenAll(coinDeskTask, topEmployeesTask);
 
-            var coinDesk =  await coinDeskTask;
-            var topEmployees = await topEmployeesTask;
+                var coinDesk = await coinDeskTask;
+                var topEmployees = await topEmployeesTask;
 
-            return topEmployees.Select(e => new EmployeeEntryBTCDto(e, coinDesk.Rate)).ToArray();
+                return topEmployees.Select(e => new EmployeeEntryBTCDto(e, coinDesk.Rate)).ToArray();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("LogError {0}", ex.Message);
+            }
+
+            return null;
         }
 
         private async Task<EmployeeEntryDto[]> GetAnnualTopUSD()
         {
-            _logger.LogInformation("Get top employees from db");
-
-            var result = await _context.Users.Select(e => new EmployeeEntryDto
+            try
             {
-                Id = e.Id,
-                Name = e.Name,
-                TotalPriceUSD = e.TimeSheetList.Where(t => t.DateOfWorks >= DateTime.UtcNow.AddYears(-1)).Sum(
-                    timeSheet =>
-                        timeSheet.WorkHours * timeSheet.Scope.Rate * timeSheet.Scope.Currency.DollarExchangeRate ?? 0)
-            }).OrderByDescending(s => s.TotalPriceUSD).Take(_tableSettings.TopEmployees).ToArrayAsync();
+                _logger.LogInformation("Get top employees from db");
 
-            _logger.LogInformation("Get top employees from db Finished");
+                var result = await _context.Users.Select(e => new EmployeeEntryDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    TotalPriceUSD = e.TimeSheetList.Where(t => t.DateOfWorks >= DateTime.UtcNow.AddYears(-1)).Sum(
+                        timeSheet =>
+                            timeSheet.WorkHours * timeSheet.Scope.Rate * timeSheet.Scope.Currency.DollarExchangeRate ?? 0)
+                }).OrderByDescending(s => s.TotalPriceUSD).Take(_tableSettings.TopEmployees).ToArrayAsync();
 
-            return result;
+                _logger.LogInformation("Get top employees from db Finished");
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("LogError {0}", ex.Message);
+            }
+
+            return null;
         }
     }
 }

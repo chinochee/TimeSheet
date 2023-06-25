@@ -17,9 +17,18 @@ namespace Services
 
         public async Task<List<string>> GetRolesNameByUserName(string userName)
         {
-            var employee = await _context.Users.Include(u => u.RoleList).FirstOrDefaultAsync(u => u.UserName == userName);
+            try
+            {
+                var employee = await _context.Users.Include(u => u.RoleList).FirstOrDefaultAsync(u => u.UserName == userName);
 
-            return employee.RoleList.Select(r => r.Name).ToList();
+                return employee.RoleList.Select(r => r.Name).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("LogError {0}", ex.Message);
+            }
+
+            return null;
         }
     }
 }
