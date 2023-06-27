@@ -1,4 +1,6 @@
-﻿using Data.Persistence;
+﻿using Data.Entities;
+using Data.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,13 +16,17 @@ namespace Services
         private readonly TableSettings _tableSettings;
         private readonly IBitcoinClientFactory _clientFactory;
         private readonly ILogger<EmployeeService> _logger;
+        private readonly UserManager<Employee> _userManager;
+        private readonly IRoleService _roleService;
 
-        public EmployeeService(ILogger<EmployeeService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinClientFactory clientFactory)
+        public EmployeeService(ILogger<EmployeeService> logger, IOptions<TableSettings> config, TimeSheetContext context, IBitcoinClientFactory clientFactory, UserManager<Employee> userManager, IRoleService roleService)
         {
             _tableSettings = config.Value;
             _context = context;
             _clientFactory = clientFactory;
             _logger = logger;
+            _userManager = userManager;
+            _roleService = roleService;
         }
 
         public async Task<EmployeeEntryDto[]> Get()
@@ -83,6 +89,53 @@ namespace Services
             }
             catch (Exception ex)
             {
+                _logger.LogError("LogError {0}", ex.Message);
+            }
+
+            return null;
+        }
+
+        public async Task<IdentityResult> Create(RegisterDataDto user)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var resultAdd = await _userManager.CreateAsync(new Employee
+                {
+                    Name = user.Name,
+                    UserName = user.UserName
+                }, user.Password);
+
+                foreach (var error in resultAdd.Errors)
+                    _logger.LogWarning($"{error.Description} ({error.Code})");
+
+                var roles = await _roleService.GetRoles();
+
+                var userCreated = await _userManager.FindByNameAsync(user.UserName);
+                userCreated.RoleList = roles.Where(r => user.RoleIdList.Contains(r.Id)).Select(role => new Role
+                {
+                    Id = role.Id,
+                    Name = role.Name,
+                    EmployeeList = new List<Employee>{ userCreated }
+                }).ToList();
+
+                var resultUpd = await _userManager.UpdateAsync(userCreated);
+
+                if (resultUpd.Succeeded)
+                {
+                    await transaction.CommitAsync();
+                    return resultUpd;
+                }
+
+                foreach (var error in resultUpd.Errors)
+                    _logger.LogWarning($"{error.Description} ({error.Code})");
+
+                return resultUpd;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
                 _logger.LogError("LogError {0}", ex.Message);
             }
 
