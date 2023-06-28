@@ -6,7 +6,7 @@ namespace Services.HttpClientService
 {
     public class BlockchainInfoHttpClient : INamedBitcoinHttpClient
     {
-        public string? ApiHostName => "Blockchain";
+        public string ApiHostName => "Blockchain";
 
         private readonly ILogger<BlockchainInfoHttpClient> _logger;
         private readonly HttpClient _httpClient;
