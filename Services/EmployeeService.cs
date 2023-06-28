@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Services.BitcoinHttpClientService;
 using Services.Configuration;
 using Services.Dtos;
+using Services.HttpClientService;
 
 namespace Services
 {

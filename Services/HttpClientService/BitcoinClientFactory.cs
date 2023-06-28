@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Services.Configuration;
 
-namespace Services.BitcoinHttpClientService
+namespace Services.HttpClientService
 {
     public class BitcoinClientFactory : IBitcoinClientFactory
     {

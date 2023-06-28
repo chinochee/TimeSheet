@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Services.BitcoinHttpClientService;
+using Services.HttpClientService;
 
 namespace Services
 {
