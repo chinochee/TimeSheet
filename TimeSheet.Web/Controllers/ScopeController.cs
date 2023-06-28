@@ -4,7 +4,7 @@ using Services;
 
 namespace TimeSheet.Web.Controllers
 {
-    [Authorize(Roles = "Admin, Manager")]
+    [Authorize(Roles = "Manager")]
     public class ScopeController : Controller
     {
         private readonly ILogger<ScopeController> _logger;
