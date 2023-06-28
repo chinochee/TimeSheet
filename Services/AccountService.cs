@@ -28,11 +28,10 @@ namespace Services
 
                 var result = await _userManager.ResetPasswordAsync(user, passToken, userEdit.Password);
 
-                if (result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                        _logger.LogWarning($"{error.Description} ({error.Code})");
-                }
+                if (result.Succeeded) { return; }
+
+                foreach (var error in result.Errors)
+                    _logger.LogWarning($"{error.Description} ({error.Code})");
             }
             catch (Exception ex)
             {
