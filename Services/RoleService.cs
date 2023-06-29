@@ -17,12 +17,12 @@ namespace Services
 
         public async Task<List<string>> GetRolesNameByUserName(string userName)
         {
-            var roles = await _context.Roles.Include(r => r.EmployeeList)
-                .Where(r => r.EmployeeList.Any(e => e.UserName == userName))
-                .Select(r => r.Name)
+            var roles = await _context.Users.Include(e => e.RoleList)
+                .Where(e => e.UserName == userName)
+                .SelectMany(e => e.RoleList)
                 .ToListAsync();
             
-            return roles;
+            return roles.Select(r => r.Name).ToList();
         }
     }
 }
