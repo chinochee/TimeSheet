@@ -1,7 +1,10 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Services.Configuration;
 using Services.Dtos;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Services
 {
@@ -9,11 +12,13 @@ namespace Services
     {
         private readonly ILogger<AccountService> _logger;
         private readonly UserManager<Employee> _userManager;
+        private readonly SignInManager<Employee> _signInManager;
 
-        public AccountService(ILogger<AccountService> logger, UserManager<Employee> userManager)
+        public AccountService(ILogger<AccountService> logger, SignInManager<Employee> signInManager, UserManager<Employee> userManager)
         {
             _logger = logger;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public async Task ChangePassword(LoginEditDto userEdit)
@@ -37,6 +42,20 @@ namespace Services
             {
                 _logger.LogError("LogError {0}", ex.Message);
             }
+        }
+
+        public async Task SignIn(Employee user, IEnumerable<Claim> customClaims, bool isPersistent = true)
+        {
+            var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
+
+            if (customClaims != null && claimsPrincipal?.Identity is ClaimsIdentity claimsIdentity)
+            {
+                claimsIdentity.AddClaims(customClaims);
+            }
+
+            await _signInManager.Context.SignInAsync(CookieSettingsConstant.AuthenticationScheme,
+                claimsPrincipal,
+                new AuthenticationProperties { IsPersistent = isPersistent });
         }
     }
 }

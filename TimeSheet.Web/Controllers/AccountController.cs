@@ -15,17 +15,17 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountService _accountService;
-        private readonly SignInManager<Employee> _signInManager;
+        private readonly UserManager<Employee> _userManager;
         private readonly IEmployeeService _employeeService;
         private readonly IRoleService _roleService;
         
-        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IEmployeeService employeeService, IRoleService roleService)
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService, UserManager<Employee> userManager, IEmployeeService employeeService, IRoleService roleService)
         {
             _logger = logger;
             _accountService = accountService;
-            _signInManager = signInManager;
             _employeeService = employeeService;
             _roleService = roleService;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -39,26 +39,25 @@ namespace TimeSheet.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginEntryDto login)
         {
-            if (login.UserName is null || login.Password is null) { return View(); }
+            var user = await _userManager.FindByNameAsync(login.UserName);
 
-            var signInResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);
+            if (user == null) return View();
 
-            if (!signInResult.Succeeded) { return View(); }
-            
-            var claims = new List<Claim> 
-            { 
-                new(ClaimTypes.Name, login.UserName)
-            };
+            var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, login.Password);
 
-            var roleList = await _roleService.GetRolesNameByUserName(login.UserName);
+            if (!passwordIsCorrect) return View();
 
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+
+            var roleList = await _roleService.GetRolesNameByUserName(user.UserName);
             claims.AddRange(roleList.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
-            
-            var identity = new ClaimsIdentity(claims, CookieSettingsConstant.AuthenticationScheme);
 
-            await HttpContext.SignInAsync(CookieSettingsConstant.AuthenticationScheme, new ClaimsPrincipal(identity));
+            await _accountService.SignIn(user, claims);
 
-            return RedirectToAction("TimeSheets","TimeSheet");
+            _logger.LogInformation(1, "User logged in.");
+
+            return RedirectToAction("TimeSheets", "TimeSheet");
         }
 
         [HttpGet]
