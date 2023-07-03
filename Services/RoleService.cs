@@ -15,10 +15,10 @@ namespace Services
             _context = context;
         }
 
-        public async Task<List<string>> GetRolesNameByUserName(string userName)
+        public async Task<List<string>> GetRolesNameByUserId(int userId)
         {
             var roles = await _context.Users.Include(e => e.RoleList)
-                .Where(e => e.UserName == userName)
+                .Where(e => e.Id == userId)
                 .SelectMany(e => e.RoleList)
                 .ToListAsync();
             

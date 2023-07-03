@@ -2,6 +2,6 @@
 {
     public interface IRoleService
     {
-        Task<List<string>> GetRolesNameByUserName(string userName);
+        Task<List<string>> GetRolesNameByUserId(int userName);
     }
 }
