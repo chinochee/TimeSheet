@@ -20,9 +20,10 @@ namespace Services
             var roles = await _context.Users.Include(e => e.RoleList)
                 .Where(e => e.Id == userId)
                 .SelectMany(e => e.RoleList)
+                .Select(r => r.Name)
                 .ToListAsync();
             
-            return roles.Select(r => r.Name).ToList();
+            return roles;
         }
     }
 }
