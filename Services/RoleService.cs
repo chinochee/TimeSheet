@@ -30,5 +30,16 @@ namespace Services
             
             return roles;
         }
+
+        public async Task<List<RoleEntryDto>> GetRoles()
+        {
+            var roles = await _context.Roles.Select(r => new RoleEntryDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+            }).ToListAsync();
+
+            return roles;
+        }
     }
 }
