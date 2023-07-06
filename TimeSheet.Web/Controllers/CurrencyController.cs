@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Attributes;
 using Services.Helpers;
 
 namespace TimeSheet.Web.Controllers
@@ -20,7 +20,7 @@ namespace TimeSheet.Web.Controllers
             _currencyImportService = currencyImportService;
         }
 
-        [Authorize(Roles = "Manager")]
+        [Access("ViewRates")]
         [HttpGet]
         public async Task<IActionResult> Currencies()
         {
@@ -28,7 +28,7 @@ namespace TimeSheet.Web.Controllers
             return View(currencies);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Access("ViewRates")]
         [HttpGet]
         public async Task<IActionResult> OnGetCurrencies()
         {
@@ -36,7 +36,7 @@ namespace TimeSheet.Web.Controllers
             return File(currencies.AsMemoryStream().ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ExchangeRates.xlsx");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Access("ImportCurrencies")]
         [HttpPost]
         public async Task<IActionResult> OnPostCurrencies(IFormFile uploadedFile)
         {

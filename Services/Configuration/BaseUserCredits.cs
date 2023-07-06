@@ -1,6 +1,6 @@
 ﻿namespace Services.Configuration
 {
-    public class BaseUserCredis
+    public class BaseUserCredits
     {
         public const string Credits = "BaseUserCredis";
         public string Login { get; set; }

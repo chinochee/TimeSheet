@@ -13,9 +13,9 @@ namespace Services
         private readonly ILogger<ReInitialUsersService> _logger;
         private readonly UserManager<Employee> _userManager;
         private readonly TimeSheetContext _context;
-        private readonly BaseUserCredis _baseUserCredits;
+        private readonly BaseUserCredits _baseUserCredits;
 
-        public ReInitialUsersService(ILogger<ReInitialUsersService> logger, UserManager<Employee> userManager, TimeSheetContext context, IOptions<BaseUserCredis> config)
+        public ReInitialUsersService(ILogger<ReInitialUsersService> logger, UserManager<Employee> userManager, TimeSheetContext context, IOptions<BaseUserCredits> config)
         {
             _logger = logger;
             _userManager = userManager;

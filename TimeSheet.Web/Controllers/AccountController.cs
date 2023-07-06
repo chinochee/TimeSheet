@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Services;
+using Services.Attributes;
 using Services.Configuration;
 using Services.Dtos;
 using System.Security.Claims;
+using static Services.Extensions.ListExtensions;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -15,17 +18,19 @@ namespace TimeSheet.Web.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountService _accountService;
-        private readonly SignInManager<Employee> _signInManager;
+        private readonly UserManager<Employee> _userManager;
         private readonly IEmployeeService _employeeService;
         private readonly IRoleService _roleService;
-        
-        public AccountController(ILogger<AccountController> logger, IAccountService accountService, SignInManager<Employee> signInManager, IEmployeeService employeeService, IRoleService roleService)
+        private readonly Dictionary<int, List<string>> _rolesPermissions;
+
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService, UserManager<Employee> userManager, IEmployeeService employeeService, IRoleService roleService, IOptions<Permissions> config)
         {
             _logger = logger;
             _accountService = accountService;
-            _signInManager = signInManager;
             _employeeService = employeeService;
             _roleService = roleService;
+            _userManager = userManager;
+            _rolesPermissions = config.Value.RolesPermissions;
         }
 
         [AllowAnonymous]
@@ -39,26 +44,35 @@ namespace TimeSheet.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginEntryDto login)
         {
-            if (login.UserName is null || login.Password is null) { return View(); }
+            var user = await _userManager.FindByNameAsync(login.UserName);
 
-            var signInResult = await _signInManager.PasswordSignInAsync(login.UserName, login.Password, true, false);
+            if (user == null) return View();
 
-            if (!signInResult.Succeeded) { return View(); }
-            
-            var claims = new List<Claim> 
-            { 
-                new(ClaimTypes.Name, login.UserName)
-            };
+            var passwordIsCorrect = await _userManager.CheckPasswordAsync(user, login.Password);
 
-            var roleList = await _roleService.GetRolesNameByUserName(login.UserName);
+            if (!passwordIsCorrect) return View();
 
-            claims.AddRange(roleList.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
-            
-            var identity = new ClaimsIdentity(claims, CookieSettingsConstant.AuthenticationScheme);
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
 
-            await HttpContext.SignInAsync(CookieSettingsConstant.AuthenticationScheme, new ClaimsPrincipal(identity));
+            var roleList = await _roleService.GetRolesByUserId(user.Id);
 
-            return RedirectToAction("TimeSheets","TimeSheet");
+            var allPermissions = new List<string>();
+            foreach (var role in roleList)
+            {
+                var rolePermissions = _rolesPermissions.Where(r => r.Key == role.Id).SelectMany(r => r.Value).ToList();
+                allPermissions.AddRange(rolePermissions);
+            }
+
+            allPermissions = RemoveDuplicates(allPermissions);
+
+            claims.AddRange(allPermissions.Select(permissions => new Claim(PermissionsConstant.ClaimType, permissions)));
+
+            await _accountService.SignIn(user, claims);
+
+            _logger.LogInformation(1, "User logged in.");
+
+            return RedirectToAction("TimeSheets", "TimeSheet");
         }
 
         [AllowAnonymous]
@@ -100,7 +114,7 @@ namespace TimeSheet.Web.Controllers
             return RedirectToAction(nameof(Login));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Access("EditUser")]
         [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {
@@ -115,7 +129,7 @@ namespace TimeSheet.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Access("EditUser")]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(LoginEditDto userEdit)
         {

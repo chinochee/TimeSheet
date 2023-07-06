@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Attributes;
 
 namespace TimeSheet.Web.Controllers
 {
-    [Authorize(Roles = "HR")]
     public class EmployeeController : Controller
     {
         private readonly ILogger<EmployeeController> _logger;
@@ -16,6 +15,7 @@ namespace TimeSheet.Web.Controllers
             _employeeTableService = employeeTableService;
         }
 
+        [Access("ViewEmployees")]
         [HttpGet]
         public async Task<IActionResult> Employees()
         {

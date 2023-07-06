@@ -1,5 +1,5 @@
-﻿@using System.Security.Claims
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Services.Configuration
 @model IEnumerable<Services.Dtos.CurrencyEntryDto>
 
 <table class="table">
@@ -39,7 +39,7 @@
     <input type="submit" value="Export currencies" />
 }
 
-@if (User.Claims.Where(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Select(claim => claim.Value).ToList().Contains("Admin"))
+@if (User.Claims.Where(c => c.Type == PermissionsConstant.ClaimType).Select(claim => claim.Value).ToList().Contains("ImportCurrencies"))
 {
     <br>
     <h3>Select file to upload</h3>
@@ -47,5 +47,4 @@
         <input type="file" name="uploadedFile" /><br>
         <input type="submit" value="Upload" />
     </form>
-
 }

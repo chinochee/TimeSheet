@@ -4,7 +4,11 @@ using Services;
 using Services.Configuration;
 using Services.HttpClientService;
 
-var dirInfo = new DirectoryInfo(@"C:\Lessons\TimeSheet");
+var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
+var indexTimeSheet = location.IndexOf("TimeSheet");
+
+var dirInfo = new DirectoryInfo(location.Remove(indexTimeSheet + "TimeSheet".Length));
 dirInfo.CreateSubdirectory(@"TimeSheetDataBaseHolder");
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +20,8 @@ builder.Services.AddDataLayer(builder.Configuration)
 builder.Services.AddRazorPages();
 builder.Services.Configure<TableSettings>(builder.Configuration.GetSection(TableSettings.Settings));
 builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection(CacheSettings.Settings));
-builder.Services.Configure<BaseUserCredis>(builder.Configuration.GetSection(BaseUserCredis.Credits));
+builder.Services.Configure<Permissions>(builder.Configuration.GetSection(Permissions.Key));
+builder.Services.Configure<BaseUserCredits>(builder.Configuration.GetSection(BaseUserCredits.Credits));
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, CoinDeskHttpClient>();
 builder.Services.AddHttpClient<INamedBitcoinHttpClient, BlockchainInfoHttpClient>();
 

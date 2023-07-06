@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Attributes;
 
 namespace TimeSheet.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
     public class ScopeController : Controller
     {
         private readonly ILogger<ScopeController> _logger;
@@ -16,6 +15,7 @@ namespace TimeSheet.Web.Controllers
             _scopeTableService = scopeTableService;
         }
 
+        [Access("ViewScopes")]
         [HttpGet]
         public async Task<IActionResult> Scopes()
         {
