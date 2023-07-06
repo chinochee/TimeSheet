@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services;
+using Services.Attributes;
 using Services.Dtos;
 using TimeSheet.Web.Models;
 
@@ -32,7 +33,7 @@ namespace TimeSheet.Web.Controllers
             return View(new TimeSheetTableModel(tableDto, filters, employees));
         }
 
-        [Authorize(Roles = "Manager, Employee")]
+        [Access("AddTimeSheet")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -54,7 +55,7 @@ namespace TimeSheet.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Manager, Employee")]
+        [Access("AddTimeSheet")]
         [HttpPost]
         public async Task<IActionResult> Create(TimeSheetCreateDto timeSheet)
         {

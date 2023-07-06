@@ -1,6 +1,7 @@
 ﻿using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Services.Dtos;
 
 namespace Services
 {
@@ -15,12 +16,16 @@ namespace Services
             _context = context;
         }
 
-        public async Task<List<string>> GetRolesNameByUserId(int userId)
+        public async Task<List<RoleEntryDto>> GetRolesByUserId(int userId)
         {
             var roles = await _context.Users.Include(e => e.RoleList)
                 .Where(e => e.Id == userId)
                 .SelectMany(e => e.RoleList)
-                .Select(r => r.Name)
+                .Select(r => new RoleEntryDto
+                {
+                    Id = r.Id,
+                    Name = r.Name
+                })
                 .ToListAsync();
             
             return roles;

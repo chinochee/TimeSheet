@@ -1,7 +1,9 @@
-﻿namespace Services
+﻿using Services.Dtos;
+
+namespace Services
 {
     public interface IRoleService
     {
-        Task<List<string>> GetRolesNameByUserId(int userName);
+        Task<List<RoleEntryDto>> GetRolesByUserId(int userName);
     }
 }
