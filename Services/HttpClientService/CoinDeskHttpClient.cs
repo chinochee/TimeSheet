@@ -22,7 +22,9 @@ namespace Services.HttpClientService
         public async Task<RatesDto> GetRates()
         {
             _logger.LogInformation("Request rates from CoinDesk API");
+
             var result = await _httpClient.GetFromJsonAsync<CoinDesk>("");
+
             _logger.LogInformation("Request rates from CoinDesk API Finished");
 
             return new RatesDto

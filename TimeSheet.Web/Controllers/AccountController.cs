@@ -75,6 +75,38 @@ namespace TimeSheet.Web.Controllers
             return RedirectToAction("TimeSheets", "TimeSheet");
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Registration()
+        {
+            var roles = await _roleService.GetRoles();
+
+            ViewBag.Roles = roles.Select(t => new SelectListItem
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            });
+            
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Registration(RegisterDataDto user)
+        {
+            if (user.UserName is null || user.Name is null || user.Password is null || user.RoleIdList.Count == 0) { return View(); }
+
+            var result = await _employeeService.Create(user);
+
+            if (!result.Succeeded) { return View(); }
+
+            return await Login(new LoginEntryDto
+            {
+                UserName = user.UserName,
+                Password = user.Password
+            });
+        }
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {

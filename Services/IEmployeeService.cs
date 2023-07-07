@@ -1,4 +1,5 @@
-﻿using Services.Dtos;
+﻿using Microsoft.AspNetCore.Identity;
+using Services.Dtos;
 
 namespace Services
 {
@@ -6,5 +7,6 @@ namespace Services
     {
         Task<EmployeeEntryDto[]> Get();
         Task<EmployeeEntryBTCDto[]> GetTopLastYearTimeSheet();
+        Task<IdentityResult> Create(RegisterDataDto user);
     }
 }

@@ -5,5 +5,6 @@ namespace Services
     public interface IRoleService
     {
         Task<List<RoleEntryDto>> GetRolesByUserId(int userName);
+        Task<List<RoleEntryDto>> GetRoles();
     }
 }
