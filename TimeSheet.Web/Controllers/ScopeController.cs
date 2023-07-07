@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Attributes;
 
 namespace TimeSheet.Web.Controllers
 {
@@ -14,6 +15,7 @@ namespace TimeSheet.Web.Controllers
             _scopeTableService = scopeTableService;
         }
 
+        [Access("ViewScopes")]
         [HttpGet]
         public async Task<IActionResult> Scopes()
         {

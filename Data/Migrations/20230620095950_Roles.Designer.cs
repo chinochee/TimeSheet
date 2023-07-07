@@ -3,6 +3,7 @@ using System;
 using Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(TimeSheetContext))]
-    partial class TimeSheetContextModelSnapshot : ModelSnapshot
+    [Migration("20230620095950_Roles")]
+    partial class Roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
@@ -35,7 +38,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies", (string)null);
+                    b.ToTable("Currencies");
                 });
 
             modelBuilder.Entity("Data.Entities.Employee", b =>
@@ -119,7 +122,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Data.Entities.Scope", b =>
@@ -141,7 +144,7 @@ namespace Data.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("Scopes", (string)null);
+                    b.ToTable("Scopes");
                 });
 
             modelBuilder.Entity("Data.Entities.TimeSheet", b =>
@@ -175,7 +178,7 @@ namespace Data.Migrations
 
                     b.HasIndex("ScopeId");
 
-                    b.ToTable("TimeSheets", (string)null);
+                    b.ToTable("TimeSheets");
                 });
 
             modelBuilder.Entity("EmployeeRole", b =>
@@ -190,7 +193,7 @@ namespace Data.Migrations
 
                     b.HasIndex("RoleListId");
 
-                    b.ToTable("EmployeeRole", (string)null);
+                    b.ToTable("EmployeeRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>

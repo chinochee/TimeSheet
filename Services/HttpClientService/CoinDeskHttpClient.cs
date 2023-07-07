@@ -6,7 +6,7 @@ namespace Services.HttpClientService
 {
     public class CoinDeskHttpClient : INamedBitcoinHttpClient
     {
-        public string? ApiHostName => "CoinDesk";
+        public string ApiHostName => "CoinDesk";
 
         private readonly ILogger<CoinDeskHttpClient> _logger;
         private readonly HttpClient _httpClient;

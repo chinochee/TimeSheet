@@ -13,6 +13,8 @@ namespace Data.Persistence
                 .WithOne(t => t.Employee)
                 .HasForeignKey(t => t.EmployeeId)
                 .IsRequired();
+            builder.HasMany(e => e.RoleList)
+                .WithMany(t => t.EmployeeList);
         }
     }
 }

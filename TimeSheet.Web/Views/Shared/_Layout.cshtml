@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Services.Configuration
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,21 +27,43 @@
 
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TimeSheet" asp-action="Create">Time sheet adding window</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Scope" asp-action="Scopes">All-time Spending</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Employees">Annual Spending</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Currency" asp-action="Currencies">Exchange rates</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Edit user</a>
-                            </li>
+                            var userRoles = User.Claims.Where(c => c.Type == PermissionsConstant.ClaimType).Select(claim => claim.Value).ToList();
+
+                            if (userRoles.Contains("AddTimeSheet"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="TimeSheet" asp-action="Create">Time sheet adding window</a>
+                                </li>
+                            }
+
+                            if (userRoles.Contains("ViewScopes"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Scope" asp-action="Scopes">All-time Spending</a>
+                                </li>
+                            }
+
+                            if (userRoles.Contains("ViewEmployees"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Employees">Annual Spending</a>
+                                </li>
+                            }
+
+                            if (userRoles.Contains("EditUser"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Edit user</a>
+                                </li>
+                            }
+
+                            if (userRoles.Contains("ViewRates"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Currency" asp-action="Currencies">Exchange rates</a>
+                                </li>
+                            }
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Log out</a>
                             </li>

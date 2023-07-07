@@ -6,5 +6,6 @@ namespace Data.Entities
     {
         public string Name { get; set; }
         public ICollection<TimeSheet> TimeSheetList { get; set; }
+        public ICollection<Role> RoleList { get; set; }
     }
 }
