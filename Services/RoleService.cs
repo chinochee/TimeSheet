@@ -18,7 +18,7 @@ namespace Services
 
         public async Task<List<RoleEntryDto>> GetRolesByUserId(int userId)
         {
-            var roles = await _context.Users.Include(e => e.RoleList)
+            var roles = await _context.Users
                 .Where(e => e.Id == userId)
                 .SelectMany(e => e.RoleList)
                 .Select(r => new RoleEntryDto
